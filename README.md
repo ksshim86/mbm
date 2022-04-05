@@ -2,7 +2,7 @@
 
 여러 브라우저를 심플하게 관리하고 꽉 찬 화면으로 모니터링 할 수 있습니다.
 
-![sample][./sample.png]
+![sample](sample.png)
 ## Resources for Learning Electron
 
 - [electronjs.org/docs](https://electronjs.org/docs) - all of Electron's documentation
