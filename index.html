@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'">
+    <link href="./jquery-ui-1.13.1/jquery-ui.css" rel="stylesheet">
+    <link href="./bootstrap-5.0.2-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./styles.css" rel="stylesheet">
+    <title>멀티 브라우저 모니터링</title>
+  </head>
+  <body>
+    <div class="h-100 d-flex justify-content-center align-items-center" id="browserCountDiv">
+      <div class="card">
+        <h5 class="card-header dark">브라우저 개수 입력</h5>
+        <div class="card-body">
+          <h5 class="card-title"></h5>
+          <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text">열 개수</span>
+            <input type="number" class="form-control" id="colCount" aria-label="열 개수" aria-describedby="colCount" min="1" value="1" max="4">
+          </div>
+          <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text" >행 개수</span>
+            <input type="number" class="form-control" id="rowCount" aria-label="행 개수" aria-describedby="rowCount" min="1" value="1" max="4">
+          </div>
+          
+          <a href="#" class="btn btn-primary float-end" id="goMultipleBrowser">시작</a>
+        </div>
+      </div>
+    </div>
+    <script src="./jquery-1.8.3.min.js"></script>
+    <script src="./jquery-ui-1.13.1/jquery-ui.js"></script>
+    <script src="./bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
+    <script src="./renderer.js"></script>
+  </body>
+</html>

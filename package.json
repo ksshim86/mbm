@@ -1,0 +1,51 @@
+{
+  "name": "multiple-browser",
+  "version": "1.0.1",
+  "description": "MultipleBrowser",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "deploy":"electron-builder --windows nsis:ia32"
+  },
+  "repository": "",
+  "keywords": [
+    "Electron",
+    "quick",
+    "start",
+    "tutorial",
+    "demo"
+  ],
+  "author": "ksshim86",
+  "license": "CC0-1.0",
+  "devDependencies": {
+    "electron": "^17.1.0",
+    "electron-builder": "^22.14.13"
+  },
+  "build":{
+    "productName": "MultipleBrowser",
+    "appId": "com.sks.mb",
+    "asar": true,
+    "protocols": {
+      "name": "MultipleBrowser",
+      "schemes": [
+        "MultipleBrowser"
+      ]
+    },
+    "win": {
+      "target": [
+        "zip",
+        "nsis"
+      ],
+      "icon": "./resources/installer/Icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "directories": {
+      "buildResources": "./resources/installer/",
+      "output": "./dist/",
+      "app": "."
+    }
+  }
+}
