@@ -2,6 +2,8 @@
 
 여러 브라우저를 심플하게 관리하고 꽉 찬 화면으로 모니터링 할 수 있습니다.
 
+Node version: v16.14.0
+
 ![sample](sample.png)
 ## Resources for Learning Electron
 
