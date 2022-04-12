@@ -1,8 +1,8 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header>
-        <main-bar />
-      </q-header>
+      <main-bar />
+    </q-header>
     <q-page-container>
       <router-view />
     </q-page-container>
