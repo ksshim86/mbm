@@ -1,51 +1,49 @@
 {
-  "name": "multiple-browser",
-  "version": "1.0.1",
-  "description": "MultipleBrowser",
-  "main": "main.js",
+  "name": "mbm",
+  "version": "0.0.1",
+  "description": "Multi Browser Monitoring",
+  "productName": "Multi Browser Monitoring",
+  "author": "ksshim86 <ksshim86@gmail.com>",
+  "private": true,
   "scripts": {
-    "start": "electron .",
-    "deploy":"electron-builder --win --x64"
+    "lint": "eslint --ext .js,.vue ./",
+    "format": "prettier --write \"**/*.{js,vue,scss,html,md,json}\" --ignore-path .gitignore",
+    "test": "echo \"No test specified\" && exit 0",
+    "dev": "quasar dev -m electron --inspector=5858"
   },
-  "repository": "",
-  "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
-  ],
-  "author": "ksshim86",
-  "license": "CC0-1.0",
+  "dependencies": {
+    "@electron/remote": "^2.0.8",
+    "@quasar/cli": "^1.3.2",
+    "@quasar/extras": "^1.0.0",
+    "core-js": "^3.6.5",
+    "electron": "^18.0.3",
+    "quasar": "^2.6.0",
+    "vue": "^3.0.0",
+    "vue-router": "^4.0.0"
+  },
   "devDependencies": {
-    "electron": "^18.0.2",
-    "electron-builder": "^22.14.13"
+    "@babel/eslint-parser": "^7.13.14",
+    "@quasar/app-webpack": "^3.0.0",
+    "eslint": "^8.10.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-vue": "^8.5.0",
+    "eslint-webpack-plugin": "^3.1.1",
+    "prettier": "^2.5.1"
   },
-  "build":{
-    "productName": "MultipleBrowser",
-    "appId": "com.sks.mb",
-    "asar": true,
-    "protocols": {
-      "name": "MultipleBrowser",
-      "schemes": [
-        "MultipleBrowser"
-      ]
-    },
-    "win": {
-      "target": [
-        "zip",
-        "nsis"
-      ],
-      "icon": "./resources/installer/Icon.ico"
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true
-    },
-    "directories": {
-      "buildResources": "./resources/installer/",
-      "output": "./dist/",
-      "app": "."
-    }
+  "browserslist": [
+    "last 10 Chrome versions",
+    "last 10 Firefox versions",
+    "last 4 Edge versions",
+    "last 7 Safari versions",
+    "last 8 Android versions",
+    "last 8 ChromeAndroid versions",
+    "last 8 FirefoxAndroid versions",
+    "last 10 iOS versions",
+    "last 5 Opera versions"
+  ],
+  "engines": {
+    "node": ">= 12.22.1",
+    "npm": ">= 6.13.4",
+    "yarn": ">= 1.21.1"
   }
 }
