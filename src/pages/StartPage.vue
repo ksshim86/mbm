@@ -1,9 +1,9 @@
 <template>
-  <q-page>
+  <q-page class="q-pa-md">
     <div class="row text-center">
       <div class="col-2">
       </div>
-      <div class="col-8 preview-col" style="height: 50%;">
+      <div class="col-8 preview-col">
         <div class="text-h4">
           <q-bar id="bar" class="text-white non-selectable no-pointer-events">
             <div><q-icon name="preview" size="24px" class="q-mr-sm" color="orange"/>Preview</div>
@@ -21,9 +21,28 @@
       <div class="col-2">
       </div>
       <div class="col-8">
-        <q-input outlined v-model="text" label="Outlined" />
-        <q-input outlined v-model="text" label="Outlined" />
-        <q-input outlined v-model="text" label="Outlined" />
+        <q-badge color="secondary">
+          Grid Count: {{ gridCount }}
+        </q-badge>
+        <q-slider
+          v-model="gridCount"
+          label-always
+          markers
+          marker-labels
+          :min="1"
+          :max="3"
+          color="orange"
+        >
+          <template v-slot:marker-label-group="scope">
+            <div
+              v-for="marker in scope.markerList"
+              :key="marker.index"
+              :class="[ `text-deep-orange-${2 + Math.ceil(marker.value / 2) }`, marker.classes ]"
+              :style="marker.style"
+              @click="model = marker.value"
+            >{{ marker.value }}</div>
+          </template>
+        </q-slider>
       </div>
       <div class="col-2">
       </div>
@@ -38,10 +57,17 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { ref, defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'StartPage'
+  name: 'StartPage',
+  setup() {
+    const gridCount = ref(1)
+
+    return {
+      gridCount,
+    }
+  }
 })
 </script>
 
@@ -52,5 +78,6 @@ export default defineComponent({
 
   .preview-col {
     border: 1px solid;
+    height: calc(100vh - 40vh);
   }
 </style>
