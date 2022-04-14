@@ -4,46 +4,7 @@
       <div class="col-2">
       </div>
       <div class="col-8 preview-col">
-        <q-bar
-          id="bar"
-          class="text-white non-selectable no-pointer-events"
-        >
-          <div>
-            <q-icon
-              name="preview"
-              size="24px"
-              class="q-mr-sm"
-              color="orange"
-            />Preview</div>
-          <q-space />
-          <q-btn
-            dense
-            flat
-            icon="minimize"
-          />
-          <q-btn
-            dense
-            flat
-            icon="crop_square"
-          />
-          <q-btn
-            dense
-            flat
-            icon="close"
-          />
-        </q-bar>
-        <div class="text-h4">
-          <div class="preview">
-            <div class="row">
-              <div class="col">1</div>
-              <div class="col">2</div>
-            </div>
-            <div class="row">
-              <div class="col">3</div>
-              <div class="col">4</div>
-            </div>
-          </div>
-        </div>
+        <preview-grid />
       </div>
       <div class="col-2">
       </div>
@@ -112,9 +73,11 @@
 </template>
 
 <script>
+import PreviewGrid from 'src/components/PreviewGrid.vue'
 import { ref, defineComponent } from 'vue'
 
 export default defineComponent({
+  components: { PreviewGrid },
   name: 'StartPage',
   setup () {
     const gridCount = ref(1)

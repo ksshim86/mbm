@@ -27,13 +27,29 @@
       icon="close"
     />
   </q-bar>
+  <div class="full-height">
+    <div class="column">
+      <div class="col-auto">
+        <div class="row">
+          <div class="col-6">1</div>
+          <div class="col-6">2</div>
+        </div>
+      </div>
+      <div class="col-auto">
+        <div class="row">
+          <div class="col-6">3</div>
+          <div class="col-6">4</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
 import { ref, defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'PreviewBar',
+  name: 'PreviewGrid',
   setup () {
     return {
     }
