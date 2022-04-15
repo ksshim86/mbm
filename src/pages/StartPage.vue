@@ -4,7 +4,11 @@
       <div class="col-2">
       </div>
       <div class="col-8 preview-col">
-        <preview-grid />
+        <preview-grid
+          grid-count="1"
+          row-count="1"
+          col-count="1"
+        />
       </div>
       <div class="col-2">
       </div>
