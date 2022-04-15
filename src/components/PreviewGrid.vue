@@ -30,16 +30,10 @@
     </q-bar>
     <div class="preview-grid">
       <div class="column full-height">
-        <div :class="rowClass">
-          <div class="row">
+        <div :class="rowClass" v-for="index in rowCount" :key="index">
+          <div :class="[rowCount === 1 ? 'row full-height' : 'row']">
             <div class="col-6">1</div>
             <div class="col-6">2</div>
-          </div>
-        </div>
-        <div class="col-6">
-          <div class="row">
-            <div class="col-6">3</div>
-            <div class="col-6">4</div>
           </div>
         </div>
       </div>

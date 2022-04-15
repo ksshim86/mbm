@@ -6,7 +6,7 @@
       <div class="col-8 preview-col">
         <preview-grid
           grid-count="1"
-          row-count="1"
+          :row-count="rowCount"
           col-count="1"
         />
       </div>
