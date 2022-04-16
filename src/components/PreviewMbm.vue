@@ -29,14 +29,29 @@
       />
     </q-bar>
     <div class="preview-grid">
-      <div class="column full-height">
-        <div :class="rowClass" v-for="index in rowCount" :key="index">
-          <div :class="[rowCount === 1 ? 'row full-height' : 'row']">
-            <div class="col-6">1</div>
-            <div class="col-6">2</div>
+      <q-carousel
+        v-model="slide"
+        transition-prev="slide-right"
+        transition-next="slide-left"
+        animated
+        infinite
+        :autoplay="2500"
+        class="full-height"
+      >
+        <q-carousel-slide 
+          v-for="carouselIdx in carouselCount" 
+          :key="carouselIdx" 
+          :name="carouselIdx" 
+          class="column full-height no-padding">
+          <div :class="rowClass" v-for="rowIdx in rowCount" :key="rowIdx">
+            <div class="row full-height">
+              <div :class="colClass" v-for="colIdx in colCount" :key="colIdx">
+                {{ carouselIdx }} x {{ rowIdx }} x {{ colIdx }}
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        </q-carousel-slide>
+      </q-carousel>
     </div>
   </div>
 </template>
@@ -45,9 +60,9 @@
 import { ref, defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'PreviewGrid',
+  name: 'PreviewMbm',
   props: {
-    gridCount: Number,
+    carouselCount: Number,
     rowCount: Number,
     colCount: Number,
   },
@@ -56,9 +71,14 @@ export default defineComponent({
       const rowMaxClassNum = 12
       return `col-${rowMaxClassNum / this.rowCount}`
     },
+    colClass () {
+      const colMaxClassNum = 12
+      return `col-${colMaxClassNum / this.colCount} custom-col`
+    }
   },
   setup () {
     return {
+      slide: ref(1),
     }
   }
 })
@@ -72,5 +92,9 @@ export default defineComponent({
 .preview-grid {
   height: calc(100% - 32px);
   width: 100;
+}
+
+.custom-col {
+  border: 1px solid;
 }
 </style>

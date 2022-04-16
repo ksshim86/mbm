@@ -4,10 +4,10 @@
       <div class="col-2">
       </div>
       <div class="col-8 preview-col">
-        <preview-grid
-          grid-count="1"
-          :row-count="rowCount"
-          col-count="1"
+        <preview-mbm
+          :carousel-count=carouselCount
+          :row-count=rowCount
+          :col-count=colCount
         />
       </div>
       <div class="col-2">
@@ -18,10 +18,10 @@
       </div>
       <div class="col-8">
         <q-badge color="secondary">
-          Grid Count: {{ gridCount }}
+          Carousel Count: {{ carouselCount }}
         </q-badge>
         <q-slider
-          v-model="gridCount"
+          v-model="carouselCount"
           markers
           marker-labels
           :min="1"
@@ -37,7 +37,7 @@
           markers
           marker-labels
           :min="1"
-          :max="3"
+          :max="4"
           color="orange"
         >
         </q-slider>
@@ -49,7 +49,7 @@
           markers
           marker-labels
           :min="1"
-          :max="3"
+          :max="4"
           color="orange"
         >
         </q-slider>
@@ -77,19 +77,19 @@
 </template>
 
 <script>
-import PreviewGrid from 'src/components/PreviewGrid.vue'
+import PreviewMbm from 'src/components/PreviewMbm.vue'
 import { ref, defineComponent } from 'vue'
 
 export default defineComponent({
-  components: { PreviewGrid },
+  components: { PreviewMbm },
   name: 'StartPage',
   setup () {
-    const gridCount = ref(1)
+    const carouselCount = ref(1)
     const rowCount = ref(1)
     const colCount = ref(1)
 
     return {
-      gridCount,
+      carouselCount,
       rowCount,
       colCount,
     }
@@ -103,7 +103,6 @@ export default defineComponent({
 }
 
 .preview-col {
-  border: 1px solid;
   height: calc(100vh - 50vh);
 }
 
