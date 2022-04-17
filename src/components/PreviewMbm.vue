@@ -35,7 +35,7 @@
         transition-next="slide-left"
         animated
         infinite
-        :autoplay="2500"
+        :autoplay="millisecond"
         class="full-height"
       >
         <q-carousel-slide 
@@ -63,6 +63,7 @@ export default defineComponent({
   name: 'PreviewMbm',
   props: {
     carouselCount: Number,
+    carouselInterval: Number,
     rowCount: Number,
     colCount: Number,
   },
@@ -74,7 +75,10 @@ export default defineComponent({
     colClass () {
       const colMaxClassNum = 12
       return `col-${colMaxClassNum / this.colCount} custom-col`
-    }
+    },
+    millisecond () {
+      return this.carouselInterval * 1000
+    },
   },
   setup () {
     return {

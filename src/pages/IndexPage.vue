@@ -27,13 +27,20 @@
 
 <script>
 import { defineComponent } from 'vue'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'IndexPage',
-  methods: {
-    handleStartBtnClicked () {
-      this.$router.push('/start')
-    },
+  setup () {
+    const router = useRouter()
+
+    const handleStartBtnClicked = () => {
+      router.push('/start')
+    }
+
+    return {
+      handleStartBtnClicked,
+    }
   }
 })
 </script>

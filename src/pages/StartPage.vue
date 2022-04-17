@@ -8,6 +8,7 @@
           :carousel-count=carouselCount
           :row-count=rowCount
           :col-count=colCount
+          :carousel-interval="carouselInterval"
         />
       </div>
       <div class="col-2">
@@ -29,6 +30,19 @@
           color="orange"
         >
         </q-slider>
+        <q-badge color="secondary">
+          Carousel Interval: {{ carouselInterval }} sec
+        </q-badge>
+        <q-input
+          v-model.number="carouselInterval"
+          type="number"
+          label-color="orange"
+          dense
+          min="1"
+          suffix="sec"
+          class="q-pb-md"
+          style="max-width: 100px"
+        />
         <q-badge color="secondary">
           Row Count: {{ rowCount }}
         </q-badge>
@@ -64,6 +78,7 @@
           text-color="orange"
           label="Back"
           icon="arrow_back"
+          @click="handleBackBtnClicked"
         />
         <q-btn
           color="dark"
@@ -79,19 +94,28 @@
 <script>
 import PreviewMbm from 'src/components/PreviewMbm.vue'
 import { ref, defineComponent } from 'vue'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   components: { PreviewMbm },
   name: 'StartPage',
   setup () {
+    const router = useRouter()
     const carouselCount = ref(1)
     const rowCount = ref(1)
     const colCount = ref(1)
+    const carouselInterval = ref(30)
+
+    const handleBackBtnClicked = () => {
+      router.push('/')
+    }
 
     return {
       carouselCount,
+      carouselInterval,
       rowCount,
       colCount,
+      handleBackBtnClicked,
     }
   }
 })
@@ -103,7 +127,7 @@ export default defineComponent({
 }
 
 .preview-col {
-  height: calc(100vh - 50vh);
+  height: calc(100vh - 60vh);
 }
 
 .preview {
