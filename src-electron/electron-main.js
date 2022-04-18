@@ -65,6 +65,10 @@ function createWindow () {
   mainWindow.on('closed', () => {
     mainWindow = null
   })
+
+  let child = new BrowserWindow({parent: mainWindow, show: false})
+
+  child.show()
 }
 
 app.whenReady().then(createWindow)
@@ -80,3 +84,4 @@ app.on('activate', () => {
     createWindow()
   }
 })
+
