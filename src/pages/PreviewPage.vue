@@ -85,6 +85,7 @@
           text-color="orange"
           label="Done"
           icon="done"
+          @click="handleDoneBtnClicked"
         />
       </q-btn-group>
     </q-footer>
@@ -98,16 +99,26 @@ import { useRouter } from 'vue-router'
 
 export default defineComponent({
   components: { PreviewMbm },
-  name: 'StartPage',
+  name: 'PreviewPage',
   setup () {
     const router = useRouter()
     const carouselCount = ref(1)
+    const carouselInterval = ref(30)
     const rowCount = ref(1)
     const colCount = ref(1)
-    const carouselInterval = ref(30)
 
     const handleBackBtnClicked = () => {
       router.push('/')
+    }
+
+    const handleDoneBtnClicked = () => {
+      router.push({name: 'monitoring',
+        params: {
+          carouselCount: carouselCount.value,
+          carouselInterval: carouselInterval.value,
+          rowCount: rowCount.value,
+          colCount: colCount.value,
+      }})
     }
 
     return {
@@ -116,6 +127,7 @@ export default defineComponent({
       rowCount,
       colCount,
       handleBackBtnClicked,
+      handleDoneBtnClicked,
     }
   }
 })
