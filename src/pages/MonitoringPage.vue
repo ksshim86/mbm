@@ -18,15 +18,36 @@
           <div :class="rowClass" v-for="rowIdx in rowCount" :key="rowIdx">
             <div class="row full-height">
               <div :class="colClass" v-for="colIdx in colCount" :key="colIdx">
-              <!-- {{ carouselIdx }} x {{ rowIdx }} x {{ colIdx }} -->
-                <webview
+                <!-- {{ carouselIdx }} x {{ rowIdx }} x {{ colIdx }} -->
+                <q-select
+                  dense
+                  :model-value="model"
+                  use-input
+                  hide-selected
+                  fill-input
+                  input-debounce="0"
+                  :options="options"
+                  @filter="filterFn"
+                  @input-value="setModel"
+                  hint="Text autocomplete"
+                  style="width: 250px; padding-bottom: 32px"
+                >
+                  <template v-slot:no-option>
+                    <q-item>
+                      <q-item-section class="text-grey">
+                        No results
+                      </q-item-section>
+                    </q-item>
+                  </template>
+                </q-select>
+                <!-- <webview
                   class="full-height full-width"
                   :id="`webview${rowIdx}-${colIdx}`" 
                   src="https://google.com" 
                   allowpopups
                   webPreferences="nativeWindowOpen" 
                   :partition="`partition${rowIdx}-${colIdx}`">
-                </webview>
+                </webview> -->
               </div>
             </div>
           </div>
@@ -39,6 +60,15 @@
 <script>
 import { ref, defineComponent } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+
+const stringOptions = [
+  'Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'
+].reduce((acc, opt) => {
+  for (let i = 1; i <= 5; i++) {
+    acc.push(opt + ' ' + i)
+  }
+  return acc
+}, [])
 
 export default defineComponent({
   name: 'MonitoringPage',
@@ -56,6 +86,9 @@ export default defineComponent({
     },
   },
   setup () {
+    const model = ref(null)
+    const options = ref(stringOptions)
+
     const route = useRoute()
 
     const carouselCount = ref(Number(route.params.carouselCount))
@@ -64,6 +97,20 @@ export default defineComponent({
     const colCount = ref(Number(route.params.colCount))
 
     return {
+      model,
+      options,
+
+      filterFn (val, update, abort) {
+        update(() => {
+          const needle = val.toLocaleLowerCase()
+          options.value = stringOptions.filter(v => v.toLocaleLowerCase().indexOf(needle) > -1)
+        })
+      },
+
+      setModel (val) {
+        model.value = val
+      },
+
       carouselCount,
       carouselInterval,
       rowCount,
