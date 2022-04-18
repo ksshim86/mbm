@@ -16,7 +16,7 @@
     </div>
     <div class="row text-center q-mt-lg">
       <div class="col-sm-6 q-pr-sm">
-        <q-btn class="full-width" color="orange" text-color="black" label="Favorite Layout" />
+        <q-btn class="full-width" color="orange" text-color="black" label="Favorite Monitoring" />
       </div>
       <div class="col-sm-6 q-pl-sm">
         <q-btn class="full-width" color="orange" text-color="black" label="Bookmark" />
@@ -35,7 +35,7 @@ export default defineComponent({
     const router = useRouter()
 
     const handleStartBtnClicked = () => {
-      router.push('/start')
+      router.push('/preview')
     }
 
     return {
