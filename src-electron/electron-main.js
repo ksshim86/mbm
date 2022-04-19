@@ -1,4 +1,4 @@
-import { app, BrowserWindow, nativeTheme } from 'electron'
+import { app, BrowserWindow, ipcMain, nativeTheme } from 'electron'
 import { initialize, enable } from '@electron/remote/main'
 import path from 'path'
 import os from 'os'
@@ -87,7 +87,6 @@ function createWindow () {
   })
 
   childWindow.loadURL(`${process.env.APP_URL}/#/control`)
-  childWindow.show()
 
   // if (process.env.DEBUGGING) {
   //   childWindow.webContents.openDevTools()
@@ -112,3 +111,10 @@ app.on('activate', () => {
   }
 })
 
+ipcMain.handle('toggleControl', (event, args) => {
+  if (args) {
+    childWindow.show()
+  } else {
+    childWindow.hide()
+  }
+})

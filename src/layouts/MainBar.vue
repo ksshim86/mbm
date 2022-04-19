@@ -49,8 +49,8 @@ export default {
   name: 'MainBar',
   setup () {
     const toggleControl = ref(false)
-    watch(toggleControl, async (newVal) => {
-      // const obj = await ipcRenderer.invoke('toggleControl', newVal)
+    watch(toggleControl, (newVal) => {
+      window.myWindowAPI.toggleControl(newVal)
     })
     // we rely upon
     function minimize () {
