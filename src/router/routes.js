@@ -9,7 +9,10 @@ const routes = [
       { name: 'monitoring', path: 'monitoring', props: true, component: () => import('src/pages/MonitoringPage.vue') },
     ]
   },
-
+  {
+    path: '/control',
+    component: () => import('src/pages/ControlPage.vue')
+  },
   // Always leave this as last one,
   // but you can also remove it
   {

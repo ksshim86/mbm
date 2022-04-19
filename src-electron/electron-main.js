@@ -15,6 +15,7 @@ try {
 initialize()
 
 let mainWindow
+let childWindow
 
 function createWindow () {
   /**
@@ -41,7 +42,7 @@ function createWindow () {
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
     return { action: 'allow' }
   })
-  
+
   mainWindow.webContents.on('did-create-window', (childWindow) => {
     childWindow.webContents.on('will-navigate', (e) => {
       e.preventDefault()
@@ -66,9 +67,35 @@ function createWindow () {
     mainWindow = null
   })
 
-  let child = new BrowserWindow({parent: mainWindow, show: false})
+  childWindow = new BrowserWindow({
+    parent: mainWindow,
+    show: false,
+    width: 200,
+    height: 750,
+    minWidth: 200,
+    minHeight: 750,
+    maxWidth: 200,
+    useContentSize: true,
+    frame: false,
+    webPreferences: {
+      contextIsolation: true,
+      preload: path.resolve(__dirname, process.env.QUASAR_ELECTRON_PRELOAD),
+      webviewTag: true,
+      nativeWindowOpen: false,
+    },
+    autoHideMenuBar: true,
+  })
 
-  child.show()
+  childWindow.loadURL(`${process.env.APP_URL}/#/control`)
+  childWindow.show()
+
+  // if (process.env.DEBUGGING) {
+  //   childWindow.webContents.openDevTools()
+  // } else {
+  //   childWindow.webContents.on('devtools-opened', () => {
+  //     childWindow.webContents.closeDevTools()
+  //   })
+  // }
 }
 
 app.whenReady().then(createWindow)
