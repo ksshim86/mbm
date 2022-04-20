@@ -11,7 +11,7 @@
         arrows
         control-type="push"
         control-color="orange"
-        :autoplay="millisecond"
+        :autoplay="false"
         class="full-height custom-carousel"
         padding
       >
@@ -34,26 +34,68 @@
                 :key="colIdx"
               >
                 <!-- {{ carouselIdx }} x {{ rowIdx }} x {{ colIdx }} -->
-                <q-select
+                <q-tabs
+                  v-model="tab"
                   dense
-                  :model-value="model"
-                  use-input
-                  hide-selected
-                  fill-input
-                  input-debounce="0"
-                  :options="options"
-                  @filter="filterFn"
-                  @input-value="setModel"
-                  hint="Text autocomplete"
+                  class="text-grey full-width"
+                  active-color="primary"
+                  indicator-color="primary"
+                  align="justify"
+                  narrow-indicator
                 >
-                  <template v-slot:no-option>
-                    <q-item>
-                      <q-item-section class="text-grey">
-                        No results
-                      </q-item-section>
-                    </q-item>
-                  </template>
-                </q-select>
+                  <q-tab
+                    name="input"
+                    label="input"
+                  />
+                  <q-tab
+                    name="bookmark"
+                    label="Bookmark"
+                  />
+                </q-tabs>
+                <q-separator />
+                <q-tab-panels
+                  v-model="tab"
+                  animated
+                  class="custom-tab"
+                >
+                  <q-tab-panel
+                    name="input"
+                    class="no-padding"
+                  >
+                    <q-input
+                      type="text"
+                      dense
+                      hint="input url"
+                      class="q-pb-md"
+                      style="max-width: 200px"
+                    />
+                  </q-tab-panel>
+                  <q-tab-panel
+                    name="bookmark"
+                    class="no-padding"
+                  >
+                    <q-select
+                      dense
+                      :model-value="model"
+                      use-input
+                      hide-selected
+                      fill-input
+                      input-debounce="0"
+                      :options="options"
+                      @filter="filterFn"
+                      @input-value="setModel"
+                      hint="Text autocomplete"
+                    >
+                      <template v-slot:no-option>
+                        <q-item>
+                          <q-item-section class="text-grey">
+                            No results
+                          </q-item-section>
+                        </q-item>
+                      </template>
+                    </q-select>
+                  </q-tab-panel>
+                </q-tab-panels>
                 <!-- <webview
                   class="full-height full-width"
                   :id="`webview${rowIdx}-${colIdx}`" 
@@ -131,7 +173,7 @@ export default defineComponent({
     return {
       model,
       options,
-
+      tab: ref('input'),
       filterFn (val, update, abort) {
         update(() => {
           const needle = val.toLocaleLowerCase()
@@ -176,5 +218,10 @@ export default defineComponent({
 
 .custom-carousel {
   background-color: aliceblue;
+}
+
+.custom-tab {
+  max-width: calc(100vw - 100px);
+  height: 80px;
 }
 </style>
