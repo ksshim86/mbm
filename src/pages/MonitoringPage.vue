@@ -33,69 +33,41 @@
                 v-for="colIdx in colCount"
                 :key="colIdx"
               >
-                <!-- {{ carouselIdx }} x {{ rowIdx }} x {{ colIdx }} -->
                 <q-tabs
                   v-model="tab"
-                  dense
-                  class="text-grey full-width"
-                  active-color="primary"
-                  indicator-color="primary"
-                  align="justify"
-                  narrow-indicator
+                  class="text-teal"
                 >
-                  <q-tab
-                    name="input"
-                    label="input"
-                  />
-                  <q-tab
-                    name="bookmark"
-                    label="Bookmark"
-                  />
+                  <q-tab name="input" label="Input" />
+                  <q-tab name="bookmark" label="Bookmark" />
                 </q-tabs>
                 <q-separator />
-                <q-tab-panels
-                  v-model="tab"
-                  animated
-                  class="custom-tab"
+                <q-input
+                  type="text"
+                  dense
+                  hint="input url"
+                  class="q-pb-md"
+                  style="max-width: 200px"
+                />
+                <!-- <q-select
+                  dense
+                  :model-value="model"
+                  use-input
+                  hide-selected
+                  fill-input
+                  input-debounce="0"
+                  :options="options"
+                  @filter="filterFn"
+                  @input-value="setModel"
+                  hint="Text autocomplete"
                 >
-                  <q-tab-panel
-                    name="input"
-                    class="no-padding"
-                  >
-                    <q-input
-                      type="text"
-                      dense
-                      hint="input url"
-                      class="q-pb-md"
-                      style="max-width: 200px"
-                    />
-                  </q-tab-panel>
-                  <q-tab-panel
-                    name="bookmark"
-                    class="no-padding"
-                  >
-                    <q-select
-                      dense
-                      :model-value="model"
-                      use-input
-                      hide-selected
-                      fill-input
-                      input-debounce="0"
-                      :options="options"
-                      @filter="filterFn"
-                      @input-value="setModel"
-                      hint="Text autocomplete"
-                    >
-                      <template v-slot:no-option>
-                        <q-item>
-                          <q-item-section class="text-grey">
-                            No results
-                          </q-item-section>
-                        </q-item>
-                      </template>
-                    </q-select>
-                  </q-tab-panel>
-                </q-tab-panels>
+                  <template v-slot:no-option>
+                    <q-item>
+                      <q-item-section class="text-grey">
+                        No results
+                      </q-item-section>
+                    </q-item>
+                  </template>
+                </q-select> -->
                 <!-- <webview
                   class="full-height full-width"
                   :id="`webview${rowIdx}-${colIdx}`" 
@@ -221,7 +193,7 @@ export default defineComponent({
 }
 
 .custom-tab {
-  max-width: calc(100vw - 100px);
+  max-width: calc(100vh - 100px);
   height: 80px;
 }
 </style>
