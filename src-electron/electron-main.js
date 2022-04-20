@@ -113,6 +113,7 @@ app.on('activate', () => {
 
 ipcMain.handle('toggleControl', (event, args) => {
   if (args) {
+    console.log('getPosition :' + mainWindow.getPosition())
     childWindow.show()
   } else {
     childWindow.hide()
