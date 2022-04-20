@@ -3,7 +3,7 @@
     <q-header>
       <main-bar />
     </q-header>
-    <q-page-container>
+    <q-page-container class="container">
       <router-view />
     </q-page-container>
   </q-layout>
@@ -24,3 +24,8 @@ export default defineComponent({
   }
 })
 </script>
+<style lang="scss" scoped>
+.container {
+  background-color: aliceblue;
+}
+</style>

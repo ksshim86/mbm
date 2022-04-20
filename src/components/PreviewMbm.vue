@@ -38,14 +38,23 @@
         :autoplay="millisecond"
         class="full-height"
       >
-        <q-carousel-slide 
-          v-for="carouselIdx in carouselCount" 
-          :key="carouselIdx" 
-          :name="carouselIdx" 
-          class="column full-height no-padding">
-          <div :class="rowClass" v-for="rowIdx in rowCount" :key="rowIdx">
+        <q-carousel-slide
+          v-for="carouselIdx in carouselCount"
+          :key="carouselIdx"
+          :name="carouselIdx"
+          class="column full-height no-padding"
+        >
+          <div
+            :class="rowClass"
+            v-for="rowIdx in rowCount"
+            :key="rowIdx"
+          >
             <div class="row full-height">
-              <div :class="colClass" v-for="colIdx in colCount" :key="colIdx">
+              <div
+                :class="colClass"
+                v-for="colIdx in colCount"
+                :key="colIdx"
+              >
                 {{ carouselIdx }} x {{ rowIdx }} x {{ colIdx }}
               </div>
             </div>

@@ -1,21 +1,27 @@
 <template>
   <q-page>
-    <div class="monitoring">
+    <div class="monitoring edit-mode">
       <q-carousel
         v-model="slide"
         transition-prev="slide-right"
         transition-next="slide-left"
         animated
         infinite
+        navigation
+        arrows
+        control-type="push"
+        control-color="orange"
         :autoplay="millisecond"
-        class="full-height"
+        class="full-height custom-carousel"
+        padding
       >
         <q-carousel-slide
           v-for="carouselIdx in carouselCount"
           :key="carouselIdx"
           :name="carouselIdx"
-          class="column full-height no-padding"
+          class="column full-height"
         >
+          <!-- no-padding -->
           <div
             :class="rowClass"
             v-for="rowIdx in rowCount"
@@ -39,7 +45,6 @@
                   @filter="filterFn"
                   @input-value="setModel"
                   hint="Text autocomplete"
-                  style="width: 250px; padding-bottom: 32px"
                 >
                   <template v-slot:no-option>
                     <q-item>
@@ -63,6 +68,23 @@
         </q-carousel-slide>
       </q-carousel>
     </div>
+    <q-footer>
+      <q-btn-group spread>
+        <q-btn
+          color="dark"
+          text-color="orange"
+          label="Back"
+          icon="arrow_back"
+          @click="handlePrevBtnClicked"
+        />
+        <q-btn
+          color="dark"
+          text-color="orange"
+          label="Done"
+          icon="done"
+        />
+      </q-btn-group>
+    </q-footer>
   </q-page>
 </template>
 
@@ -98,6 +120,7 @@ export default defineComponent({
     const model = ref(null)
     const options = ref(stringOptions)
 
+    const router = useRouter()
     const route = useRoute()
 
     const carouselCount = ref(Number(route.params.carouselCount))
@@ -120,6 +143,9 @@ export default defineComponent({
         model.value = val
       },
 
+      handlePrevBtnClicked () {
+        router.push('/preview')
+      },
       carouselCount,
       carouselInterval,
       rowCount,
@@ -131,11 +157,24 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.monitoring-header {
+  margin-top: 32px;
+}
+
 .monitoring {
-  height: calc(100vh - 32px);
+  height: calc(100vh - 68px);
 }
 
 .custom-col {
   border: 1px solid;
+  background-color: white;
+}
+
+.edit-mode {
+  padding: 40px;
+}
+
+.custom-carousel {
+  background-color: aliceblue;
 }
 </style>
