@@ -50,6 +50,7 @@
                 <q-tab-panels
                   v-model="tab"
                   animated
+                  class="custom-panels"
                 >
                   <q-tab-panel
                     name="input"
@@ -222,5 +223,9 @@ export default defineComponent({
 .custom-tab {
   max-width: calc(100vh - 100px);
   height: 80px;
+}
+
+.custom-panels {
+  height: calc(100% - 48px);
 }
 </style>
