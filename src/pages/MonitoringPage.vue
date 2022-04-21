@@ -37,37 +37,64 @@
                   v-model="tab"
                   class="text-teal"
                 >
-                  <q-tab name="input" label="Input" />
-                  <q-tab name="bookmark" label="Bookmark" />
+                  <q-tab
+                    name="input"
+                    label="Input"
+                  />
+                  <q-tab
+                    name="bookmark"
+                    label="Bookmark"
+                  />
                 </q-tabs>
                 <q-separator />
-                <q-input
-                  type="text"
-                  dense
-                  hint="input url"
-                  class="q-pb-md"
-                  style="max-width: 200px"
-                />
-                <!-- <q-select
-                  dense
-                  :model-value="model"
-                  use-input
-                  hide-selected
-                  fill-input
-                  input-debounce="0"
-                  :options="options"
-                  @filter="filterFn"
-                  @input-value="setModel"
-                  hint="Text autocomplete"
+                <q-tab-panels
+                  v-model="tab"
+                  animated
                 >
-                  <template v-slot:no-option>
-                    <q-item>
-                      <q-item-section class="text-grey">
-                        No results
-                      </q-item-section>
-                    </q-item>
-                  </template>
-                </q-select> -->
+                  <q-tab-panel
+                    name="input"
+                    class="q-pa-sm"
+                  >
+                    <q-input
+                      type="text"
+                      dense
+                      hint="input url"
+                      class="q-pb-md"
+                    >
+                      <template v-slot:after>
+                        <q-btn
+                          round
+                          dense
+                          flat
+                          icon="send"
+                        />
+                      </template>
+                    </q-input>
+                  </q-tab-panel>
+
+                  <q-tab-panel name="bookmark">
+                    <q-select
+                      dense
+                      :model-value="model"
+                      use-input
+                      hide-selected
+                      fill-input
+                      input-debounce="0"
+                      :options="options"
+                      @filter="filterFn"
+                      @input-value="setModel"
+                      hint="Text autocomplete"
+                    >
+                      <template v-slot:no-option>
+                        <q-item>
+                          <q-item-section class="text-grey">
+                            No results
+                          </q-item-section>
+                        </q-item>
+                      </template>
+                    </q-select>
+                  </q-tab-panel>
+                </q-tab-panels>
                 <!-- <webview
                   class="full-height full-width"
                   :id="`webview${rowIdx}-${colIdx}`" 
@@ -124,7 +151,7 @@ export default defineComponent({
     },
     colClass () {
       const colMaxClassNum = 12
-      return `col-${colMaxClassNum / this.colCount} custom-col row justify-center items-center`
+      return `col-${colMaxClassNum / this.colCount} custom-col`
     },
     millisecond () {
       return this.carouselInterval * 1000
