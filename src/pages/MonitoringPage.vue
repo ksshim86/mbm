@@ -1,116 +1,39 @@
 <template>
   <q-page>
-    <div class="monitoring edit-mode">
-      <q-carousel
-        v-model="slide"
-        transition-prev="slide-right"
-        transition-next="slide-left"
-        animated
-        infinite
-        navigation
-        arrows
-        control-type="push"
-        control-color="orange"
+    <div :class="pageClass">
+      <vue-agile
+        :dots="false"
+        :infinite="false"
         :autoplay="false"
-        class="full-height custom-carousel"
-        padding
+        :centerMode="false"
+        :autoplay-speed="1000"
+        class="full-height"
       >
-        <q-carousel-slide
+        <div
           v-for="carouselIdx in carouselCount"
           :key="carouselIdx"
-          :name="carouselIdx"
-          class="column full-height"
         >
-          <!-- no-padding -->
           <div
-            :class="rowClass"
             v-for="rowIdx in rowCount"
             :key="rowIdx"
+            :class="rowClass"
           >
-            <div class="row full-height">
-              <div
-                :class="colClass"
-                v-for="colIdx in colCount"
-                :key="colIdx"
-              >
-                <q-tabs
-                  v-model="tab"
-                  class="text-teal"
-                >
-                  <q-tab
-                    name="input"
-                    label="Input"
-                  />
-                  <q-tab
-                    name="bookmark"
-                    label="Bookmark"
-                  />
-                </q-tabs>
-                <q-separator />
-                <q-tab-panels
-                  v-model="tab"
-                  animated
-                  class="custom-panels"
-                >
-                  <q-tab-panel
-                    name="input"
-                    class="q-pa-sm"
-                  >
-                    <q-input
-                      type="text"
-                      dense
-                      hint="input url"
-                      class="q-pb-md"
-                    >
-                      <template v-slot:after>
-                        <q-btn
-                          round
-                          dense
-                          flat
-                          icon="send"
-                        />
-                      </template>
-                    </q-input>
-                  </q-tab-panel>
-
-                  <q-tab-panel name="bookmark">
-                    <q-select
-                      dense
-                      :model-value="model"
-                      use-input
-                      hide-selected
-                      fill-input
-                      input-debounce="0"
-                      :options="options"
-                      @filter="filterFn"
-                      @input-value="setModel"
-                      hint="Text autocomplete"
-                    >
-                      <template v-slot:no-option>
-                        <q-item>
-                          <q-item-section class="text-grey">
-                            No results
-                          </q-item-section>
-                        </q-item>
-                      </template>
-                    </q-select>
-                  </q-tab-panel>
-                </q-tab-panels>
-                <!-- <webview
-                  class="full-height full-width"
-                  :id="`webview${rowIdx}-${colIdx}`" 
-                  src="https://google.com" 
-                  allowpopups
-                  webPreferences="nativeWindowOpen" 
-                  :partition="`partition${rowIdx}-${colIdx}`">
-                </webview> -->
-              </div>
+            <div
+              v-for="colIdx in colCount"
+              :key="colIdx"
+              :class="colClass"
+            >
+              <url-select
+                :carousel-idx=carouselIdx
+                :row-idx=rowIdx
+                :col-idx=colIdx
+              />
             </div>
           </div>
-        </q-carousel-slide>
-      </q-carousel>
+        </div>
+      </vue-agile>
     </div>
-    <q-footer>
+    <q-footer v-if="!isDone">
       <q-btn-group spread>
         <q-btn
           color="dark"
@@ -124,6 +47,7 @@
           text-color="orange"
           label="Done"
           icon="done"
+          @click="isDone = true"
         />
       </q-btn-group>
     </q-footer>
@@ -133,22 +57,20 @@
 <script>
 import { ref, defineComponent } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-
-const stringOptions = [
-  'Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'
-].reduce((acc, opt) => {
-  for (let i = 1; i <= 5; i++) {
-    acc.push(opt + ' ' + i)
-  }
-  return acc
-}, [])
+import { VueAgile } from 'vue-agile'
+import UrlSelect from 'src/components/UrlSelect.vue'
 
 export default defineComponent({
   name: 'MonitoringPage',
+  components: { UrlSelect, VueAgile },
   computed: {
+    pageClass () {
+      return this.isDone ? 'monitoring-done' : 'monitoring edit-mode'
+    },
     rowClass () {
       const rowMaxClassNum = 12
-      return `col-${rowMaxClassNum / this.rowCount}`
+      // return `col-${rowMaxClassNum / this.rowCount}`
+      return 'row'
     },
     colClass () {
       const colMaxClassNum = 12
@@ -157,11 +79,14 @@ export default defineComponent({
     millisecond () {
       return this.carouselInterval * 1000
     },
+    carouselSlideClass () {
+      return this.isDone ? 'column full-height no-padding' : 'column full-height'
+    },
+    autoplay () {
+      return this.isDone ? this.millisecond : false
+    }
   },
   setup () {
-    const model = ref(null)
-    const options = ref(stringOptions)
-
     const router = useRouter()
     const route = useRoute()
 
@@ -171,20 +96,7 @@ export default defineComponent({
     const colCount = ref(Number(route.params.colCount))
 
     return {
-      model,
-      options,
-      tab: ref('input'),
-      filterFn (val, update, abort) {
-        update(() => {
-          const needle = val.toLocaleLowerCase()
-          options.value = stringOptions.filter(v => v.toLocaleLowerCase().indexOf(needle) > -1)
-        })
-      },
-
-      setModel (val) {
-        model.value = val
-      },
-
+      isDone: ref(false),
       handlePrevBtnClicked () {
         router.push('/preview')
       },
@@ -205,6 +117,10 @@ export default defineComponent({
 
 .monitoring {
   height: calc(100vh - 68px);
+}
+
+.monitoring-done {
+  height: calc(100vh - 32px);
 }
 
 .custom-col {
