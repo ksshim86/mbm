@@ -13,3 +13,6 @@
 - GitHub Theme
 - intelliCode
 - Vetur
+
+# memo
+- https://naver.github.io/egjs-flicking/Demos
