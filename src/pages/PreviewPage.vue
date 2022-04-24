@@ -124,6 +124,7 @@ export default defineComponent({
     }
 
     const handleNextBtnClicked = () => {
+      // router.push('/test')
       router.push({
         name: 'monitoring',
         params: {
