@@ -140,7 +140,7 @@ export default defineComponent({
   created () {
     const idx = `${this.carouselIdx}-${this.rowIdx}-${this.colIdx}`
 
-    window.myWindowAPI.receive(`editOn-${idx}`, function (args) {
+    window.myWindowAPI.receive(`controlSelectUrlOn-${idx}`, function (args) {
       this.isEdit = true
     }.bind(this))
   },

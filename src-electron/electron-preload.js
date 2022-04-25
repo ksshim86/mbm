@@ -35,15 +35,24 @@ contextBridge.exposeInMainWorld('myWindowAPI', {
   close () {
     BrowserWindow.getFocusedWindow().close()
   },
+  sendMonitoringProps (args) {
+    ipcRenderer.invoke('sendMonitoringProps', args)
+  },
+  getMonitoringProps () {
+    return ipcRenderer.invoke('getMonitoringProps')
+  },
   toggleControl (args) {
     ipcRenderer.invoke('toggleControl', args)
   },
-  controlEditOn (args) {
-    ipcRenderer.invoke('controlEditOn', args)
+  controlEditModeOn (args) {
+    ipcRenderer.invoke('controlEditModeOn', args)
+  },
+  controlSelectUrlOn (args) {
+    ipcRenderer.invoke('controlSelectUrlOn', args)
   },
 
   receive: (channel, func) => {
-    let validChannels = ['back', 'editOn']
+    let validChannels = ['back', 'controlEditModeOn', 'controlSelectUrlOn']
     if (validChannels.filter(valid => channel.indexOf(valid) > -1)) {
       ipcRenderer.on(channel, (event, ...args) => func(...args))
     }

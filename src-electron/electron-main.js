@@ -70,11 +70,11 @@ function createWindow () {
   childWindow = new BrowserWindow({
     parent: mainWindow,
     show: false,
-    width: 200,
-    height: 750,
-    minWidth: 200,
-    minHeight: 750,
-    maxWidth: 200,
+    width: 350,
+    height: 500,
+    minWidth: 350,
+    minHeight: 500,
+    maxWidth: 350,
     useContentSize: true,
     frame: false,
     webPreferences: {
@@ -111,6 +111,12 @@ app.on('activate', () => {
   }
 })
 
+let monitoringProps = {}
+
+ipcMain.handle('sendMonitoringProps', (event, args) => {
+  monitoringProps = JSON.parse(JSON.stringify(args))
+})
+
 ipcMain.handle('toggleControl', (event, args) => {
   if (args) {
     console.log('getPosition :' + mainWindow.getPosition())
@@ -120,6 +126,15 @@ ipcMain.handle('toggleControl', (event, args) => {
   }
 })
 
-ipcMain.handle('controlEditOn', (event, args) => {
-  mainWindow.webContents.send(`editOn-${args}`)
+ipcMain.handle('getMonitoringProps', () => {
+  console.log(monitoringProps)
+  return monitoringProps
+})
+
+ipcMain.handle('controlEditModeOn', () => {
+  mainWindow.webContents.send('controlEditModeOn')
+})
+
+ipcMain.handle('controlSelectUrlOn', (event, args) => {
+  mainWindow.webContents.send(`controlSelectUrlOn-${args}`)
 })

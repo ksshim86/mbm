@@ -53,7 +53,7 @@
           text-color="orange"
           label="Done"
           icon="done"
-          @click="isDone = true"
+          @click="handleDoneBtnClicked"
         />
       </q-btn-group>
     </q-footer>
@@ -115,11 +115,22 @@ export default defineComponent({
     const rowCount = ref(Number(route.params.rowCount))
     const colCount = ref(Number(route.params.colCount))
 
+    const isDone = ref(false)
+    
     return {
       modules: [Autoplay, Pagination, Navigation],
-      isDone: ref(false),
+      isDone,
       handlePrevBtnClicked () {
         router.push('/preview')
+      },
+      handleDoneBtnClicked () {
+        isDone.value = true
+        window.myWindowAPI.sendMonitoringProps({
+          carouselCount: carouselCount.value,
+          carouselInterval: carouselInterval.value,
+          rowCount: rowCount.value,
+          colCount: colCount.value,
+        })
       },
       carouselCount,
       carouselInterval,
@@ -132,6 +143,10 @@ export default defineComponent({
   created () {
     window.myWindowAPI.receive('back', function (args) {
       this.router.push('/preview')
+    }.bind(this))
+
+    window.myWindowAPI.receive('controlEditModeOn', function (args) {
+      this.isDone = false
     }.bind(this))
   },
 })
