@@ -23,7 +23,6 @@ contextBridge.exposeInMainWorld('myWindowAPI', {
   minimize () {
     BrowserWindow.getFocusedWindow().minimize()
   },
-
   toggleMaximize () {
     const win = BrowserWindow.getFocusedWindow()
 
@@ -33,12 +32,20 @@ contextBridge.exposeInMainWorld('myWindowAPI', {
       win.maximize()
     }
   },
-
   close () {
     BrowserWindow.getFocusedWindow().close()
   },
-
   toggleControl (args) {
     ipcRenderer.invoke('toggleControl', args)
   },
+  controlEditOn (args) {
+    ipcRenderer.invoke('controlEditOn', args)
+  },
+
+  receive: (channel, func) => {
+    let validChannels = ['back', 'editOn']
+    if (validChannels.filter(valid => channel.indexOf(valid) > -1)) {
+      ipcRenderer.on(channel, (event, ...args) => func(...args))
+    }
+  }
 })

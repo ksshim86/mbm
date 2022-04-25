@@ -1,8 +1,9 @@
 <template>
   <q-page>
     <swiper
-      :navigation="!isDone"
+      :navigation="!isDone && carouselCount > 1"
       :modules="modules"
+      :allowTouchMove="false"
       :loop="true"
       :autoplay="swiperAutoplay"
       :pagination="isPagination"
@@ -25,8 +26,12 @@
                 :key="colIdx"
                 :class="colClass"
               >
-                <div class="row fit justify-center items-center content-center custom-col">
-                  {{carouselIdx}} x {{rowIdx}} x {{colIdx}}
+                <div class="full-height custom-col">
+                  <url-select
+                    :carouselIdx=carouselIdx
+                    :rowIdx=rowIdx
+                    :colIdx=colIdx
+                  />
                 </div>
               </div>
             </div>
@@ -34,31 +39,6 @@
         </div>
       </swiper-slide>
     </swiper>
-
-    <!-- <div :class="pageClass">
-      <div
-        v-for="carouselIdx in carouselCount"
-        :key="carouselIdx"
-      >
-        <div
-          v-for="rowIdx in rowCount"
-          :key="rowIdx"
-          :class="rowClass"
-        >
-          <div
-            v-for="colIdx in colCount"
-            :key="colIdx"
-            :class="colClass"
-          >
-            <url-select
-              :carousel-idx=carouselIdx
-              :row-idx=rowIdx
-              :col-idx=colIdx
-            />
-          </div>
-        </div>
-      </div>
-    </div> -->
     <q-footer v-if="!isDone">
       <q-btn-group spread>
         <q-btn
@@ -88,14 +68,14 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'
 import { Autoplay, Pagination, Navigation } from 'swiper'
-// import UrlSelect from 'src/components/UrlSelect.vue'
+import UrlSelect from 'src/components/UrlSelect.vue'
 
 export default defineComponent({
   name: 'MonitoringPage',
-  components: { 
+  components: {
     Swiper,
     SwiperSlide,
-    // UrlSelect,
+    UrlSelect,
   },
   computed: {
     rowClass () {
@@ -119,7 +99,11 @@ export default defineComponent({
       return this.isDone ? 'done-mode' : 'edit-mode'
     },
     swiperAutoplay () {
-      return this.isDone ? {delay: this.millisecond, disableOnInteraction: false} : {delay: 99999999, disableOnInteraction: false}
+      if (this.carouselCount > 1) {
+        return this.isDone ? { delay: this.millisecond, disableOnInteraction: false } : { delay: 99999999, disableOnInteraction: false }
+      } else {
+        return false
+      }
     }
   },
   setup () {
@@ -142,8 +126,14 @@ export default defineComponent({
       rowCount,
       colCount,
       slide: ref(1),
+      router,
     }
-  }
+  },
+  created () {
+    window.myWindowAPI.receive('back', function (args) {
+      this.router.push('/preview')
+    }.bind(this))
+  },
 })
 </script>
 
@@ -154,7 +144,7 @@ export default defineComponent({
 
 .edit-mode {
   height: calc(100vh - 68px);
-  padding: 32px;
+  padding: 48px;
 }
 
 .custom-col {

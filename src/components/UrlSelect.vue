@@ -1,82 +1,88 @@
 <template>
-  <div class="full-height">
-    <div v-if="!isInput">
-      <q-tabs
-        v-model="tab"
-        class="text-teal"
-      >
-        <q-tab
-          name="input"
-          label="Input"
-        />
-        <q-tab
-          name="bookmark"
-          label="Bookmark"
-        />
-      </q-tabs>
-      <q-separator />
-      <q-tab-panels
-        v-model="tab"
-        animated
-      >
-        <q-tab-panel
-          name="input"
-          class="q-pa-sm"
-        >
-          <q-input
-            v-model="urlInput"
-            type="text"
-            dense
-            hint="input url"
-            class="q-pb-md"
-          >
-            <template v-slot:after>
-              <q-btn
-                round
-                dense
-                flat
-                icon="send"
-                @click="handleUrlInputClicked"
-              />
-            </template>
-          </q-input>
-        </q-tab-panel>
-
-        <q-tab-panel name="bookmark">
-          <q-select
-            dense
-            :model-value="model"
-            use-input
-            hide-selected
-            fill-input
-            input-debounce="0"
-            :options="options"
-            @filter="filterFn"
-            @input-value="setModel"
-            hint="Text autocomplete"
-          >
-            <template v-slot:no-option>
-              <q-item>
-                <q-item-section class="text-grey">
-                  No results
-                </q-item-section>
-              </q-item>
-            </template>
-          </q-select>
-        </q-tab-panel>
-      </q-tab-panels>
-    </div>
-    <webview
-      v-else
-      class="full-height full-width"
-      :id="`webview${rowIdx}-${colIdx}`"
-      :src="urlInput"
-      allowpopups
-      webPreferences="nativeWindowOpen"
-      :partition="`partition${rowIdx}-${colIdx}`"
+  <div
+    v-if="isEdit"
+    class="full-height"
+  >
+    <q-tabs
+      v-model="tab"
+      class="text-teal"
     >
-    </webview>
+      <q-tab
+        name="input"
+        label="Input"
+      />
+      <q-tab
+        name="bookmark"
+        label="Bookmark"
+      />
+    </q-tabs>
+    <q-separator />
+    <q-tab-panels
+      v-model="tab"
+      animated
+      class="row custom-panels"
+    >
+      <q-tab-panel
+        name="input"
+        class="row col justify-center items-center custom-panel q-pa-sm"
+      >
+        <q-input
+          v-model="urlInput"
+          type="text"
+          dense
+          hint="input url"
+          class="custom-input q-pb-md"
+        >
+          <template v-slot:after>
+            <q-btn
+              round
+              dense
+              flat
+              icon="send"
+              @click="handleUrlInputClicked"
+            />
+          </template>
+        </q-input>
+      </q-tab-panel>
+
+      <q-tab-panel
+        name="bookmark"
+        class="row col justify-center items-center custom-panel q-pa-sm"
+      >
+        <q-select
+          dense
+          :model-value="model"
+          use-input
+          hide-selected
+          fill-input
+          input-debounce="0"
+          :options="options"
+          @filter="filterFn"
+          @input-value="setModel"
+          hint="Text autocomplete"
+          class="custom-input"
+        >
+          <template v-slot:no-option>
+            <q-item>
+              <q-item-section class="text-grey">
+                No results
+              </q-item-section>
+            </q-item>
+          </template>
+        </q-select>
+      </q-tab-panel>
+    </q-tab-panels>
   </div>
+  <webview
+    v-else
+    class="full-height full-width"
+    :id="`webview${rowIdx}-${colIdx}`"
+    :src="urlInput"
+    allowpopups
+    webPreferences="nativeWindowOpen"
+    :partition="`partition${rowIdx}-${colIdx}`"
+  >
+  </webview>
 </template>
 
 <script>
@@ -102,13 +108,19 @@ export default defineComponent({
     const model = ref(null)
     const options = ref(stringOptions)
     const urlInput = ref('')
-    const isInput = ref(false)
+    const isEdit = ref(true)
     const handleUrlInputClicked = () => {
-      isInput.value = true
+      isEdit.value = false
     }
 
+    // const idx = `${carouselIdx}-${rowIdx}-${colIdx}`
+
+    // window.myWindowAPI.receive(`editOn-${idx}`, function (args) {
+    //   isEdit.value = true
+    // })
+
     return {
-      isInput,
+      isEdit,
       urlInput,
       model,
       options,
@@ -124,9 +136,35 @@ export default defineComponent({
         model.value = val
       },
     }
-  }
+  },
+  created () {
+    const idx = `${this.carouselIdx}-${this.rowIdx}-${this.colIdx}`
+
+    window.myWindowAPI.receive(`editOn-${idx}`, function (args) {
+      this.isEdit = true
+    }.bind(this))
+  },
 })
 </script>
 
-<style>
+<style lang="scss" scoped>
+.custom-tab {
+  max-width: calc(100vh - 100px);
+  height: 80px;
+}
+
+.custom-panels {
+  height: calc(100% - 50px);
+}
+
+.custom-panel {
+  width: auto;
+  height: calc(100% - 16px);
+}
+
+.custom-input {
+  width: 100% !important;
+  min-width: 165px !important;
+  max-width: 400px !important;
+}
 </style>

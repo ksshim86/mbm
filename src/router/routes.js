@@ -7,7 +7,6 @@ const routes = [
       { path: '', component: () => import('pages/IndexPage.vue') },
       { path: 'preview', component: () => import('src/pages/PreviewPage.vue') },
       { name: 'monitoring', path: 'monitoring', props: true, component: () => import('src/pages/MonitoringPage.vue') },
-      { path: 'test', component: () => import('src/pages/TestPage.vue') },
     ]
   },
   {

@@ -119,3 +119,7 @@ ipcMain.handle('toggleControl', (event, args) => {
     childWindow.hide()
   }
 })
+
+ipcMain.handle('controlEditOn', (event, args) => {
+  mainWindow.webContents.send(`editOn-${args}`)
+})

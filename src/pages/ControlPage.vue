@@ -19,7 +19,7 @@
         @click="closeApp"
       />
     </q-bar>
-    Hello Control Page!
+    <q-btn @click="controlEditOn">1-1-1 재입력 버튼</q-btn>
   </div>
 </template>
 
@@ -28,7 +28,11 @@ import { defineComponent, ref } from 'vue'
 export default defineComponent({
   name: 'ControlPage',
   setup () {
-    return {}
+    return {
+      controlEditOn () {
+        window.myWindowAPI.controlEditOn('1-1-1')
+      },
+    }
   }
 })
 </script>
