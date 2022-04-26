@@ -102,8 +102,6 @@ export default defineComponent({
   name: 'PreviewPage',
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      console.log(vm)
-      console.log(to, from, next)
       if (from.name === 'monitoring') {
         vm.carouselCount = Number(from.params.carouselCount)
         vm.carouselInterval = Number(from.params.carouselInterval)
@@ -124,7 +122,6 @@ export default defineComponent({
     }
 
     const handleNextBtnClicked = () => {
-      // router.push('/test')
       router.push({
         name: 'monitoring',
         params: {

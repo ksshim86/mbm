@@ -15,7 +15,6 @@ try {
 initialize()
 
 let mainWindow
-let childWindow
 
 function createWindow () {
   /**
@@ -66,7 +65,25 @@ function createWindow () {
   mainWindow.on('closed', () => {
     mainWindow = null
   })
+}
 
+app.whenReady().then(createWindow)
+
+app.on('window-all-closed', () => {
+  if (platform !== 'darwin') {
+    app.quit()
+  }
+})
+
+app.on('activate', () => {
+  if (mainWindow === null) {
+    createWindow()
+  }
+})
+
+let childWindow = null
+
+function createChildWindow () {
   childWindow = new BrowserWindow({
     parent: mainWindow,
     show: false,
@@ -97,20 +114,6 @@ function createWindow () {
   // }
 }
 
-app.whenReady().then(createWindow)
-
-app.on('window-all-closed', () => {
-  if (platform !== 'darwin') {
-    app.quit()
-  }
-})
-
-app.on('activate', () => {
-  if (mainWindow === null) {
-    createWindow()
-  }
-})
-
 let monitoringProps = {}
 
 ipcMain.handle('sendMonitoringProps', (event, args) => {
@@ -119,10 +122,12 @@ ipcMain.handle('sendMonitoringProps', (event, args) => {
 
 ipcMain.handle('toggleControl', (event, args) => {
   if (args) {
-    console.log('getPosition :' + mainWindow.getPosition())
+    // console.log('getPosition :' + mainWindow.getPosition())
+    console.log('childWindow : ' + childWindow)
+    createChildWindow()
     childWindow.show()
   } else {
-    childWindow.hide()
+    childWindow.close()
   }
 })
 

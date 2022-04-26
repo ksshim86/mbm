@@ -118,7 +118,7 @@ export default defineComponent({
     this.colCount = colCount
 
     for (let i = 1; i <= carouselCount; i++) {
-      
+
       for (let j = 1; j <= rowCount; j++) {
         const option = []
 

@@ -16,8 +16,9 @@
       flat
     >
       <q-toggle
-        color="orange"
+        v-if="editIsDone"
         v-model="toggleControl"
+        color="orange"
         label="Control On/Off"
         left-label
       />
@@ -43,11 +44,22 @@
   </q-bar>
 </template>
 <script>
-import { ref, watch } from 'vue'
-
+import { ref, computed, watch } from 'vue'
+import { useRoute } from 'vue-router'
+import { useMonitoringStore } from 'stores/monitoring'
 export default {
   name: 'MainBar',
   setup () {
+    const route = useRoute()
+    watch(route, function (to, from, next) {
+      if (from !== undefined) {
+        console.log(`to: ${to.path} , from: ${from.path}`)
+      }
+    }.bind(this), { flush: 'pre', immediate: true, deep: true })
+    const $store = useMonitoringStore()
+    const editIsDone = computed({
+      get: () => $store.getIsDone,
+    })
     const toggleControl = ref(false)
     watch(toggleControl, (newVal) => {
       window.myWindowAPI.toggleControl(newVal)
@@ -72,12 +84,14 @@ export default {
     }
 
     return {
+      editIsDone,
+      route,
       toggleControl,
       minimize,
       toggleMaximize,
       closeApp,
     }
-  }
+  },
 }
 </script>
 <style lang="scss" scoped>
