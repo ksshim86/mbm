@@ -50,16 +50,19 @@ import { useMonitoringStore } from 'stores/monitoring'
 export default {
   name: 'MainBar',
   setup () {
-    const route = useRoute()
-    watch(route, function (to, from, next) {
-      if (from !== undefined) {
-        console.log(`to: ${to.path} , from: ${from.path}`)
-      }
-    }.bind(this), { flush: 'pre', immediate: true, deep: true })
     const $store = useMonitoringStore()
-    const editIsDone = computed({
-      get: () => $store.getIsDone,
-    })
+    const route = useRoute()
+    const editIsDone = ref(false)
+    watch(route, function (to, from, next) {
+      // console.log(`to: ${to.path} , prevPath: ${prevPath}`)
+      // prevPath = to.path
+      editIsDone.value = $store.getIsDone
+    }.bind(this), { flush: 'pre', immediate: true, deep: true })
+
+    // done 버튼 눌렀을때 변수 따로 관리해서 있어야 할 듯
+    // const editIsDone = computed({
+    //   get: () => $store.getIsDone,
+    // })
     const toggleControl = ref(false)
     watch(toggleControl, (newVal) => {
       window.myWindowAPI.toggleControl(newVal)

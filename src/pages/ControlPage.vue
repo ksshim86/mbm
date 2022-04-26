@@ -72,6 +72,7 @@
 
 <script>
 import { defineComponent, ref } from 'vue'
+import { useMonitoringStore } from 'stores/monitoring'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/css'
 import 'swiper/css/pagination'
@@ -85,6 +86,8 @@ export default defineComponent({
     SwiperSlide,
   },
   setup () {
+    const $store = useMonitoringStore()
+
     const carouselCount = ref(0)
     const carouselInterval = ref(0)
     const rowCount = ref(0)
@@ -100,6 +103,7 @@ export default defineComponent({
       rowCount,
       colCount,
       controlEditModeOn () {
+        $store.edit()
         window.myWindowAPI.controlEditModeOn()
       },
       controlSelectUrlOn () {
@@ -109,8 +113,6 @@ export default defineComponent({
   },
   async created () {
     const { carouselCount, carouselInterval, rowCount, colCount } = await window.myWindowAPI.getMonitoringProps()
-
-    console.log(carouselCount, carouselInterval, rowCount, colCount)
 
     this.carouselCount = carouselCount
     this.carouselInterval = carouselInterval
@@ -123,7 +125,6 @@ export default defineComponent({
         const option = []
 
         for (let x = 1; x <= colCount; x++) {
-          console.log(`${i}x${j}x${x}`)
           option.push({
             label: `${i}x${j}x${x}`, value: `${i}x${j}x${x}`
           })
@@ -132,7 +133,6 @@ export default defineComponent({
         this.options.push(option)
       }
     }
-    console.log(this.options)
   },
   computed: {
     rowClass () {
