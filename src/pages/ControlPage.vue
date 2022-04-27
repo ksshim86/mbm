@@ -94,6 +94,12 @@ export default defineComponent({
     const colCount = ref(0)
     const options = ref([])
 
+    function closeApp () {
+      if (process.env.MODE === 'electron') {
+        window.myWindowAPI.close()
+      }
+    }
+
     return {
       options,
       model: ref('0-0-0'),
@@ -103,12 +109,13 @@ export default defineComponent({
       rowCount,
       colCount,
       controlEditModeOn () {
-        $store.edit()
+        $store.setIsDone(false)
         window.myWindowAPI.controlEditModeOn()
       },
       controlSelectUrlOn () {
         window.myWindowAPI.controlSelectUrlOn('1-1-1')
       },
+      closeApp,
     }
   },
   async created () {

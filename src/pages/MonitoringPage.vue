@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import { ref, defineComponent } from 'vue'
+import { ref, defineComponent, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useMonitoringStore } from 'stores/monitoring'
 import { Swiper, SwiperSlide } from 'swiper/vue'
@@ -118,6 +118,9 @@ export default defineComponent({
     const colCount = ref(Number(route.params.colCount))
 
     const isDone = ref(false)
+    watch(isDone, function (to, from) {
+      $store.setIsDone(to)
+    }.bind(this))
 
     return {
       modules: [Autoplay, Pagination, Navigation],
@@ -126,7 +129,6 @@ export default defineComponent({
         router.push('/preview')
       },
       handleDoneBtnClicked () {
-        $store.done()
         isDone.value = true
         window.myWindowAPI.sendMonitoringProps({
           carouselCount: carouselCount.value,

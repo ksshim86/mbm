@@ -12,11 +12,8 @@ export const useMonitoringStore = defineStore('monitoring', {
   },
 
   actions: {
-    done () {
-      this.isDone = true
-    },
-    edit () {
-      this.isDone = false
+    setIsDone (isDone) {
+      this.isDone = isDone
     },
   }
 })

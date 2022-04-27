@@ -47,6 +47,7 @@
 import { ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useMonitoringStore } from 'stores/monitoring'
+
 export default {
   name: 'MainBar',
   setup () {
@@ -54,20 +55,18 @@ export default {
     const route = useRoute()
     const editIsDone = ref(false)
     watch(route, function (to, from, next) {
-      // console.log(`to: ${to.path} , prevPath: ${prevPath}`)
-      // prevPath = to.path
       editIsDone.value = $store.getIsDone
     }.bind(this), { flush: 'pre', immediate: true, deep: true })
 
-    // done 버튼 눌렀을때 변수 따로 관리해서 있어야 할 듯
-    // const editIsDone = computed({
-    //   get: () => $store.getIsDone,
-    // })
+    watch($store, function (to, from) {
+      editIsDone.value = to.isDone
+    }.bind(this), { flush: 'pre', immediate: true, deep: true })
+
     const toggleControl = ref(false)
     watch(toggleControl, (newVal) => {
       window.myWindowAPI.toggleControl(newVal)
     })
-    // we rely upon
+
     function minimize () {
       if (process.env.MODE === 'electron') {
         window.myWindowAPI.minimize()
@@ -87,6 +86,7 @@ export default {
     }
 
     return {
+      $store,
       editIsDone,
       route,
       toggleControl,
