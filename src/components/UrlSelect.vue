@@ -1,88 +1,90 @@
 <template>
-  <div
-    v-if="isEdit"
-    class="full-height"
-  >
-    <q-tabs
-      v-model="tab"
-      class="text-teal"
+  <div class="full-height">
+    <div
+      v-if="isEdit"
+      class="full-height"
     >
-      <q-tab
-        name="input"
-        label="Input"
-      />
-      <q-tab
-        name="bookmark"
-        label="Bookmark"
-      />
-    </q-tabs>
-    <q-separator />
-    <q-tab-panels
-      v-model="tab"
-      animated
-      class="row custom-panels"
-    >
-      <q-tab-panel
-        name="input"
-        class="row col justify-center items-center custom-panel q-pa-sm"
+      <q-tabs
+        v-model="tab"
+        class="text-teal"
       >
-        <q-input
-          v-model="urlInput"
-          type="text"
-          dense
-          hint="input url"
-          class="custom-input q-pb-md"
+        <q-tab
+          name="input"
+          label="Input"
+        />
+        <q-tab
+          name="bookmark"
+          label="Bookmark"
+        />
+      </q-tabs>
+      <q-separator />
+      <q-tab-panels
+        v-model="tab"
+        animated
+        class="row custom-panels"
+      >
+        <q-tab-panel
+          name="input"
+          class="row col justify-center items-center custom-panel q-pa-sm"
         >
-          <template v-slot:after>
-            <q-btn
-              round
-              dense
-              flat
-              icon="send"
-              @click="handleUrlInputClicked"
-            />
-          </template>
-        </q-input>
-      </q-tab-panel>
+          <q-input
+            v-model="urlInput"
+            type="text"
+            dense
+            hint="input url"
+            class="custom-input q-pb-md"
+          >
+            <template v-slot:after>
+              <q-btn
+                round
+                dense
+                flat
+                icon="send"
+                @click="handleUrlInputClicked"
+              />
+            </template>
+          </q-input>
+        </q-tab-panel>
 
-      <q-tab-panel
-        name="bookmark"
-        class="row col justify-center items-center custom-panel q-pa-sm"
-      >
-        <q-select
-          dense
-          :model-value="model"
-          use-input
-          hide-selected
-          fill-input
-          input-debounce="0"
-          :options="options"
-          @filter="filterFn"
-          @input-value="setModel"
-          hint="Text autocomplete"
-          class="custom-input"
+        <q-tab-panel
+          name="bookmark"
+          class="row col justify-center items-center custom-panel q-pa-sm"
         >
-          <template v-slot:no-option>
-            <q-item>
-              <q-item-section class="text-grey">
-                No results
-              </q-item-section>
-            </q-item>
-          </template>
-        </q-select>
-      </q-tab-panel>
-    </q-tab-panels>
+          <q-select
+            dense
+            :model-value="model"
+            use-input
+            hide-selected
+            fill-input
+            input-debounce="0"
+            :options="options"
+            @filter="filterFn"
+            @input-value="setModel"
+            hint="Text autocomplete"
+            class="custom-input"
+          >
+            <template v-slot:no-option>
+              <q-item>
+                <q-item-section class="text-grey">
+                  No results
+                </q-item-section>
+              </q-item>
+            </template>
+          </q-select>
+        </q-tab-panel>
+      </q-tab-panels>
+    </div>
+    <webview
+      v-else
+      class="full-height full-width"
+      :id="`webview${rowIdx}-${colIdx}`"
+      :src="urlInput"
+      allowpopups
+      webPreferences="nativeWindowOpen"
+      :partition="`partition${rowIdx}-${colIdx}`"
+    >
+    </webview>
   </div>
-  <webview
-    v-else
-    class="full-height full-width"
-    :id="`webview${rowIdx}-${colIdx}`"
-    :src="urlInput"
-    allowpopups
-    webPreferences="nativeWindowOpen"
-    :partition="`partition${rowIdx}-${colIdx}`"
-  >
-  </webview>
 </template>
 
 <script>

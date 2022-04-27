@@ -50,9 +50,12 @@ contextBridge.exposeInMainWorld('myWindowAPI', {
   controlSelectUrlOn (args) {
     ipcRenderer.invoke('controlSelectUrlOn', args)
   },
+  closeChild () {
+    ipcRenderer.invoke('closeChild')
+  },
 
   receive: (channel, func) => {
-    let validChannels = ['back', 'controlEditModeOn', 'controlSelectUrlOn']
+    let validChannels = ['back', 'controlEditModeOn', 'controlSelectUrlOn', 'controlWindowClose']
     if (validChannels.filter(valid => channel.indexOf(valid) > -1)) {
       ipcRenderer.on(channel, (event, ...args) => func(...args))
     }

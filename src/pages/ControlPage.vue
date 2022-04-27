@@ -16,7 +16,7 @@
         dense
         flat
         icon="close"
-        @click="closeApp"
+        @click="closeChild"
       />
     </q-bar>
     <div class="row">
@@ -39,7 +39,7 @@
               class="q-mb-sm"
             >
               <q-btn-toggle
-                v-model="model"
+                v-model="toggle"
                 class="q-gutter-x-xs"
                 spread
                 toggle-color="purple"
@@ -48,19 +48,6 @@
                 :options="options[carouselIdx > 1 ? (carouselIdx - 1) * rowCount + (rowIdx - 1) : (rowIdx - 1)]"
               />
             </div>
-            <!-- <div class="column">
-              <div
-                v-for="rowIdx in rowCount"
-                :key="rowIdx"
-                :class="rowClass"
-              >
-                <div class="row justify-center items-center content-center q-gutter-xs">
-                  <div class="q-gutter-xs">
-                    <q-btn color="brown" label="Button" v-for="colIdx in colCount" :key="colIdx" />
-                  </div>
-                </div>
-              </div>
-            </div> -->
           </swiper-slide>
         </swiper>
       </div>
@@ -94,15 +81,17 @@ export default defineComponent({
     const colCount = ref(0)
     const options = ref([])
 
-    function closeApp () {
+    const toggle = ref('')
+
+    function closeChild () {
       if (process.env.MODE === 'electron') {
-        window.myWindowAPI.close()
+        window.myWindowAPI.closeChild()
       }
     }
 
     return {
       options,
-      model: ref('0-0-0'),
+      toggle,
       modules: [Autoplay, Pagination, Navigation],
       carouselCount,
       carouselInterval,
@@ -113,9 +102,12 @@ export default defineComponent({
         window.myWindowAPI.controlEditModeOn()
       },
       controlSelectUrlOn () {
-        window.myWindowAPI.controlSelectUrlOn('1-1-1')
+        console.log(toggle)
+        if (toggle.value !== '') {
+          window.myWindowAPI.controlSelectUrlOn(toggle.value)
+        }
       },
-      closeApp,
+      closeChild,
     }
   },
   async created () {
@@ -133,7 +125,7 @@ export default defineComponent({
 
         for (let x = 1; x <= colCount; x++) {
           option.push({
-            label: `${i}x${j}x${x}`, value: `${i}x${j}x${x}`
+            label: `${i}x${j}x${x}`, value: `${i}-${j}-${x}`
           })
         }
 

@@ -15,4 +15,6 @@
 - Vetur
 
 # memo
-- https://naver.github.io/egjs-flicking/Demos
+- 컨트롤창을 킨 경우, 슬라이드를 멈춘다.
+- 슬라이드 페이지는 첫페이지로 돌아간다.
+- 컨트롤 슬라이드와 모니터링 슬라이드를 동기화 시킨다.

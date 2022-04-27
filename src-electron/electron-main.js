@@ -105,6 +105,9 @@ function createChildWindow () {
 
   childWindow.loadURL(`${process.env.APP_URL}/#/control`)
 
+  childWindow.on('closed', () => {
+    childWindow = null
+  })
   // if (process.env.DEBUGGING) {
   //   childWindow.webContents.openDevTools()
   // } else {
@@ -113,6 +116,11 @@ function createChildWindow () {
   //   })
   // }
 }
+
+ipcMain.handle('closeChild', () => {
+  childWindow.close()
+  mainWindow.webContents.send('controlWindowClose')
+})
 
 let monitoringProps = {}
 
@@ -123,16 +131,16 @@ ipcMain.handle('sendMonitoringProps', (event, args) => {
 ipcMain.handle('toggleControl', (event, args) => {
   if (args) {
     // console.log('getPosition :' + mainWindow.getPosition())
-    console.log('childWindow : ' + childWindow)
     createChildWindow()
     childWindow.show()
   } else {
-    childWindow.close()
+    if (childWindow != null) {
+      childWindow.close()
+    }
   }
 })
 
 ipcMain.handle('getMonitoringProps', () => {
-  console.log(monitoringProps)
   return monitoringProps
 })
 

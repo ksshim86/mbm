@@ -44,7 +44,7 @@
   </q-bar>
 </template>
 <script>
-import { ref, computed, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useMonitoringStore } from 'stores/monitoring'
 
@@ -94,6 +94,11 @@ export default {
       toggleMaximize,
       closeApp,
     }
+  },
+  created () {
+    window.myWindowAPI.receive('controlWindowClose', function (args) {
+      this.toggleControl = false
+    }.bind(this))
   },
 }
 </script>

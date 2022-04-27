@@ -10,7 +10,7 @@
     "format": "prettier --write \"**/*.{js,vue,scss,html,md,json}\" --ignore-path .gitignore",
     "test": "echo \"No test specified\" && exit 0",
     "dev": "quasar dev -m electron --inspector=5858",
-    "deploy": "electron-builder --win --x64"
+    "build": "quasar build -m electron"
   },
   "dependencies": {
     "@electron/remote": "^2.0.8",
