@@ -1,6 +1,7 @@
 <template>
   <q-page>
     <swiper
+      ref="swiper"
       :navigation="!isDone && carouselCount > 1"
       :modules="modules"
       :allowTouchMove="false"
@@ -9,6 +10,7 @@
       :pagination="isPagination"
       :spaceBetween="50"
       :class="swiperClass"
+      @swiper="setSwiperRef"
     >
       <swiper-slide
         v-for="carouselIdx in carouselCount"
@@ -78,6 +80,66 @@ export default defineComponent({
     SwiperSlide,
     UrlSelect,
   },
+  setup () {
+    const $store = useMonitoringStore()
+    const router = useRouter()
+    const route = useRoute()
+
+    const carouselCount = ref(Number(route.params.carouselCount))
+    const carouselInterval = ref(Number(route.params.carouselInterval))
+    const rowCount = ref(Number(route.params.rowCount))
+    const colCount = ref(Number(route.params.colCount))
+
+    const isDone = ref(false)
+    watch(isDone, function (to, from) {
+      $store.setIsDone(to)
+    }.bind(this))
+
+    const swiperRef = ref(null)
+    const setSwiperRef = (swiper) => {
+      swiper.autoplay.stop()
+      swiperRef.value = swiper
+    }
+
+    const handleDoneBtnClicked = () => {
+      isDone.value = true
+      swiperRef.value.autoplay.start()
+
+      window.myWindowAPI.sendMonitoringProps({
+        carouselCount: carouselCount.value,
+        carouselInterval: carouselInterval.value,
+        rowCount: rowCount.value,
+        colCount: colCount.value,
+      })
+    }
+
+    return {
+      modules: [Autoplay, Pagination, Navigation],
+      setSwiperRef,
+      swiperRef,
+      isDone,
+      handlePrevBtnClicked () {
+        router.push('/preview')
+      },
+      handleDoneBtnClicked,
+      carouselCount,
+      carouselInterval,
+      rowCount,
+      colCount,
+      slide: ref(1),
+      router,
+    }
+  },
+  created () {
+    window.myWindowAPI.receive('back', function (args) {
+      this.router.push('/preview')
+    }.bind(this))
+
+    window.myWindowAPI.receive('controlEditModeOn', function (args) {
+      this.isDone = false
+      this.swiperRef.autoplay.stop()
+    }.bind(this))
+  },
   computed: {
     rowClass () {
       const rowMaxClassNum = 12
@@ -101,58 +163,11 @@ export default defineComponent({
     },
     swiperAutoplay () {
       if (this.carouselCount > 1) {
-        return this.isDone ? { delay: this.millisecond, disableOnInteraction: false } : { delay: 99999999, disableOnInteraction: false }
+        return { delay: this.millisecond, disableOnInteraction: false }
       } else {
         return false
       }
     }
-  },
-  setup () {
-    const $store = useMonitoringStore()
-    const router = useRouter()
-    const route = useRoute()
-
-    const carouselCount = ref(Number(route.params.carouselCount))
-    const carouselInterval = ref(Number(route.params.carouselInterval))
-    const rowCount = ref(Number(route.params.rowCount))
-    const colCount = ref(Number(route.params.colCount))
-
-    const isDone = ref(false)
-    watch(isDone, function (to, from) {
-      $store.setIsDone(to)
-    }.bind(this))
-
-    return {
-      modules: [Autoplay, Pagination, Navigation],
-      isDone,
-      handlePrevBtnClicked () {
-        router.push('/preview')
-      },
-      handleDoneBtnClicked () {
-        isDone.value = true
-        window.myWindowAPI.sendMonitoringProps({
-          carouselCount: carouselCount.value,
-          carouselInterval: carouselInterval.value,
-          rowCount: rowCount.value,
-          colCount: colCount.value,
-        })
-      },
-      carouselCount,
-      carouselInterval,
-      rowCount,
-      colCount,
-      slide: ref(1),
-      router,
-    }
-  },
-  created () {
-    window.myWindowAPI.receive('back', function (args) {
-      this.router.push('/preview')
-    }.bind(this))
-
-    window.myWindowAPI.receive('controlEditModeOn', function (args) {
-      this.isDone = false
-    }.bind(this))
   },
 })
 </script>
