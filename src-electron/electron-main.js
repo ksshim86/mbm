@@ -103,11 +103,18 @@ function createChildWindow () {
     autoHideMenuBar: true,
   })
 
-  childWindow.loadURL(`${process.env.APP_URL}/#/control`)
+  const childUrl = process.env.DEBUGGING
+    ? `${process.env.APP_URL}#/control`
+    : `file://${__dirname}/index.html#/control`
+
+  childWindow.loadURL(childUrl)
 
   childWindow.on('closed', () => {
     childWindow = null
   })
+
+  childWindow.webContents.openDevTools()
+
   // if (process.env.DEBUGGING) {
   //   childWindow.webContents.openDevTools()
   // } else {
