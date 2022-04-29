@@ -1,4 +1,4 @@
-# visual studoi code version
+# visual studoio code version
 - Version: 1.46.1
 - Commit: cd9ea6488829f560dc949a8b2fb789f3cdc05f5d
 - Date: 2020-06-17T21:13:20.174Z
@@ -15,6 +15,8 @@
 - Vetur
 
 # memo
-- 컨트롤창을 킨 경우, 슬라이드를 멈춘다.
-- 슬라이드 페이지는 첫페이지로 돌아간다.
-- 컨트롤 슬라이드와 모니터링 슬라이드를 동기화 시킨다.
+- (완료)컨트롤창을 킨 경우, 슬라이드를 멈춘다.
+  . toggleControl을 store로 관리해야 할 듯?
+
+- (완료)컨트롤창을 킨 경우, 슬라이드 페이지는 첫페이지로 돌아간다.
+- (완료)컨트롤 슬라이드와 모니터링 슬라이드를 동기화 시킨다.
