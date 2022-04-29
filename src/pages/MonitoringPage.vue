@@ -96,11 +96,6 @@ export default defineComponent({
     },
     )
 
-    // watch(slideIndex, (to) => {
-    //   console.log(`swiperRef.value.slideTo(${to})`)
-    //   swiperRef.value.slideTo(to)
-    // })
-
     const router = useRouter()
     const route = useRoute()
 
@@ -127,6 +122,7 @@ export default defineComponent({
         swiperRef.value.autoplay.start()
       }
 
+      // 편집이 완료된 경우, 세팅된 값을 main으로 값을 전달한다
       window.myWindowAPI.sendMonitoringProps({
         carouselCount: carouselCount.value,
         carouselInterval: carouselInterval.value,
@@ -161,8 +157,8 @@ export default defineComponent({
       this.isDone = false
     }.bind(this))
 
+    // 컨트롤의 슬라이드 변경 시, index를 받아 동기화 한다
     window.myWindowAPI.receive('getSlideIndex', function (args) {
-      console.log('getSlideIndex : ' + args)
       this.swiperRef.slideTo(args)
     }.bind(this))
   },
