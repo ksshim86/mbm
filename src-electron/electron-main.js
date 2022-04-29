@@ -113,15 +113,13 @@ function createChildWindow () {
     childWindow = null
   })
 
-  childWindow.webContents.openDevTools()
-
-  // if (process.env.DEBUGGING) {
-  //   childWindow.webContents.openDevTools()
-  // } else {
-  //   childWindow.webContents.on('devtools-opened', () => {
-  //     childWindow.webContents.closeDevTools()
-  //   })
-  // }
+  if (process.env.DEBUGGING) {
+    childWindow.webContents.openDevTools()
+  } else {
+    childWindow.webContents.on('devtools-opened', () => {
+      childWindow.webContents.closeDevTools()
+    })
+  }
 }
 
 ipcMain.handle('closeChild', () => {
@@ -161,4 +159,12 @@ ipcMain.handle('controlSelectUrlOn', (event, args) => {
 
 ipcMain.handle('setSlideIndex', (event, args) => {
   mainWindow.webContents.send('getSlideIndex', args)
+})
+
+ipcMain.handle('commandZoomIn', (event, args) => {
+  mainWindow.webContents.send(`zoomIn-${args}`)
+})
+
+ipcMain.handle('commandZoomOut', (event, args) => {
+  mainWindow.webContents.send(`zoomOut-${args}`)
 })

@@ -77,6 +77,7 @@
     </div>
     <webview
       v-else
+      ref="webview"
       class="full-height full-width"
       :id="`webview${rowIdx}-${colIdx}`"
       :src="urlInput"
@@ -145,6 +146,18 @@ export default defineComponent({
 
     window.myWindowAPI.receive(`controlSelectUrlOn-${idx}`, function (args) {
       this.isEdit = true
+    }.bind(this))
+
+    window.myWindowAPI.receive(`zoomIn-${idx}`, function (args) {
+      const webview = this.$refs.webview
+      const zoomLevel = Number(webview.getZoomLevel())
+      webview.setZoomLevel(zoomLevel + 1)
+    }.bind(this))
+
+    window.myWindowAPI.receive(`zoomOut-${idx}`, function (args) {
+      const webview = this.$refs.webview
+      const zoomLevel = Number(webview.getZoomLevel())
+      webview.setZoomLevel(zoomLevel - 1)
     }.bind(this))
   },
 })

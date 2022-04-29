@@ -68,6 +68,7 @@
         color="orange"
         text-color="grey-9"
         :disable="toggle === ''"
+        @click="zoomIn"
       />
       <q-btn
         icon="zoom_out"
@@ -75,6 +76,7 @@
         color="orange"
         text-color="grey-9"
         :disable="toggle === ''"
+        @click="zoomOut"
       />
     </div>
   </div>
@@ -147,6 +149,12 @@ export default defineComponent({
         if (toggle.value !== '') {
           window.myWindowAPI.controlSelectUrlOn(toggle.value)
         }
+      },
+      zoomIn () {
+        window.myWindowAPI.commandZoomIn(toggle.value)
+      },
+      zoomOut () {
+        window.myWindowAPI.commandZoomOut(toggle.value)
       },
       closeChild,
       setSlideIndex,
