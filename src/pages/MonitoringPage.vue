@@ -103,7 +103,10 @@ export default defineComponent({
 
     const handleDoneBtnClicked = () => {
       isDone.value = true
-      swiperRef.value.autoplay.start()
+
+      if (carouselCount.value > 1) {
+        swiperRef.value.autoplay.start()
+      }
 
       window.myWindowAPI.sendMonitoringProps({
         carouselCount: carouselCount.value,
@@ -137,7 +140,9 @@ export default defineComponent({
 
     window.myWindowAPI.receive('controlEditModeOn', function (args) {
       this.isDone = false
-      this.swiperRef.autoplay.stop()
+      if (this.swiperRef.autoplay !== undefined) {
+        this.swiperRef.autoplay.stop()
+      }
     }.bind(this))
   },
   computed: {
