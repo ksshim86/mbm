@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="bg-dark">
     <q-bar
       id="bar"
       class="q-electron-drag text-white"
@@ -78,6 +78,13 @@
         :disable="toggle === ''"
         @click="zoomOut"
       />
+      <q-btn
+        icon="first_page"
+        label="go main"
+        color="orange"
+        text-color="grey-9"
+        @click="goMain"
+      />
     </div>
   </div>
 </template>
@@ -155,6 +162,9 @@ export default defineComponent({
       },
       zoomOut () {
         window.myWindowAPI.commandZoomOut(toggle.value)
+      },
+      goMain () {
+        window.myWindowAPI.commandGoMain()
       },
       closeChild,
       setSlideIndex,

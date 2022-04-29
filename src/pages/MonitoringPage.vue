@@ -161,6 +161,10 @@ export default defineComponent({
     window.myWindowAPI.receive('getSlideIndex', function (args) {
       this.swiperRef.slideTo(args)
     }.bind(this))
+
+    window.myWindowAPI.receive('goMain', function (args) {
+      this.router.push('/')
+    }.bind(this))
   },
   computed: {
     rowClass () {

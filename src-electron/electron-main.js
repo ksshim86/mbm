@@ -168,3 +168,11 @@ ipcMain.handle('commandZoomIn', (event, args) => {
 ipcMain.handle('commandZoomOut', (event, args) => {
   mainWindow.webContents.send(`zoomOut-${args}`)
 })
+
+ipcMain.handle('commandGoMain', () => {
+  if (childWindow != null) {
+    childWindow.close()
+  }
+
+  mainWindow.webContents.send('goMain')
+})

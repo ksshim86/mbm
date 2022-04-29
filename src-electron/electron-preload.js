@@ -56,17 +56,19 @@ contextBridge.exposeInMainWorld('myWindowAPI', {
   setSlideIndex (args) {
     ipcRenderer.invoke('setSlideIndex', args)
   },
-
   commandZoomIn (args) {
     ipcRenderer.invoke('commandZoomIn', args)
   },
-
   commandZoomOut (args) {
     ipcRenderer.invoke('commandZoomOut', args)
   },
+  commandGoMain () {
+    ipcRenderer.invoke('commandGoMain')
+  },
 
   receive: (channel, func) => {
-    let validChannels = ['back', 'controlEditModeOn', 'controlSelectUrlOn', 'controlWindowClose', 'getSlideIndex', 'zoomIn', 'zoomOut']
+    let validChannels = ['back', 'controlEditModeOn', 'controlSelectUrlOn',
+      'controlWindowClose', 'getSlideIndex', 'zoomIn', 'zoomOut', 'goMain']
     if (validChannels.filter(valid => channel.indexOf(valid) > -1)) {
       ipcRenderer.on(channel, (event, ...args) => func(...args))
     }
