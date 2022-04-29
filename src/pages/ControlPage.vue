@@ -24,10 +24,11 @@
         <swiper
           :modules="modules"
           :allowTouchMove="false"
-          :pagination="{ clickable: true }"
+          :pagination="paginationOption"
           :spaceBetween="50"
           :autoHeight="true"
           style="padding: 28px;"
+          @swiper="setSwiperRef"
         >
           <swiper-slide
             v-for="carouselIdx in carouselCount"
@@ -80,7 +81,12 @@ export default defineComponent({
     const rowCount = ref(0)
     const colCount = ref(0)
     const options = ref([])
-
+    const paginationOption = ref({
+      clickable: true,
+      renderBullet: function (index, className) {
+        return '<span class="' + className + '">' + (index + 1) + "</span>";
+      },
+    })
     const toggle = ref('')
 
     function closeChild () {
@@ -89,8 +95,21 @@ export default defineComponent({
       }
     }
 
+    const swiperRef = ref(null)
+    const setSwiperRef = (swiper) => {
+      swiperRef.value = swiper
+    }
+
+    const setSlideIndex = (slideIndex) => {
+      $store.setSlideIndex(slideIndex)
+    }
+
     return {
+      $store,
+      swiperRef,
+      setSwiperRef,
       options,
+      paginationOption,
       toggle,
       modules: [Autoplay, Pagination, Navigation],
       carouselCount,
@@ -102,12 +121,12 @@ export default defineComponent({
         window.myWindowAPI.controlEditModeOn()
       },
       controlSelectUrlOn () {
-        console.log(toggle)
         if (toggle.value !== '') {
           window.myWindowAPI.controlSelectUrlOn(toggle.value)
         }
       },
       closeChild,
+      setSlideIndex,
     }
   },
   async created () {
@@ -132,6 +151,11 @@ export default defineComponent({
         this.options.push(option)
       }
     }
+
+    this.swiperRef.on('slideChange', function (data) {
+      this.setSlideIndex(data.activeIndex)
+      window.myWindowAPI.setSlideIndex(data.activeIndex)
+    }.bind(this))
   },
   computed: {
     rowClass () {
@@ -150,7 +174,7 @@ div.q-btn-group > button:nth-child(1) {
   margin-left: 0px !important;
 }
 </style>
-<style lang="scss" scoped>
+<style lang="scss">
 #bar {
   background-color: #202225;
 }
@@ -159,5 +183,21 @@ div.q-btn-group > button:nth-child(1) {
   border: 1px solid;
   width: 50px;
   height: 50px;
+}
+
+.swiper-pagination-bullet {
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 20px;
+  font-size: 12px;
+  color: #000;
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.swiper-pagination-bullet-active {
+  color: #fff;
+  background: #007aff;
 }
 </style>

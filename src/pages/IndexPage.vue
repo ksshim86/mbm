@@ -15,7 +15,7 @@
               align="top"
               color="orange"
               text-color="black"
-            >v1.0.2</q-badge>
+            >beta</q-badge>
           </div>
         </div>
       </div>
@@ -37,6 +37,7 @@
             color="orange"
             text-color="black"
             label="Favorite Monitoring"
+            disable
           />
         </div>
         <div class="col-sm-6 q-pl-sm">
@@ -45,6 +46,7 @@
             color="orange"
             text-color="black"
             label="Bookmark"
+            disable
           />
         </div>
       </div>

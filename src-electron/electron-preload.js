@@ -53,9 +53,12 @@ contextBridge.exposeInMainWorld('myWindowAPI', {
   closeChild () {
     ipcRenderer.invoke('closeChild')
   },
+  setSlideIndex (args) {
+    ipcRenderer.invoke('setSlideIndex', args)
+  },
 
   receive: (channel, func) => {
-    let validChannels = ['back', 'controlEditModeOn', 'controlSelectUrlOn', 'controlWindowClose']
+    let validChannels = ['back', 'controlEditModeOn', 'controlSelectUrlOn', 'controlWindowClose', 'getSlideIndex']
     if (validChannels.filter(valid => channel.indexOf(valid) > -1)) {
       ipcRenderer.on(channel, (event, ...args) => func(...args))
     }

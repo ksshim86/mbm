@@ -158,3 +158,7 @@ ipcMain.handle('controlEditModeOn', () => {
 ipcMain.handle('controlSelectUrlOn', (event, args) => {
   mainWindow.webContents.send(`controlSelectUrlOn-${args}`)
 })
+
+ipcMain.handle('setSlideIndex', (event, args) => {
+  mainWindow.webContents.send('getSlideIndex', args)
+})

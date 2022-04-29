@@ -47,23 +47,26 @@
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useMonitoringStore } from 'stores/monitoring'
+import { storeToRefs } from 'pinia'
 
 export default {
   name: 'MainBar',
   setup () {
     const $store = useMonitoringStore()
+    const { isDone } = storeToRefs($store)
     const route = useRoute()
     const editIsDone = ref(false)
     watch(route, function (to, from, next) {
       editIsDone.value = $store.getIsDone
     }.bind(this), { flush: 'pre', immediate: true, deep: true })
 
-    watch($store, function (to, from) {
-      editIsDone.value = to.isDone
-    }.bind(this), { flush: 'pre', immediate: true, deep: true })
+    watch(isDone, function (to, from) {
+      editIsDone.value = to
+    })
 
     const toggleControl = ref(false)
     watch(toggleControl, (newVal) => {
+      $store.setToggleControl(newVal)
       window.myWindowAPI.toggleControl(newVal)
     })
 

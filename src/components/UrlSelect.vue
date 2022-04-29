@@ -62,6 +62,7 @@
             @input-value="setModel"
             hint="Text autocomplete"
             class="custom-input"
+            disable
           >
             <template v-slot:no-option>
               <q-item>

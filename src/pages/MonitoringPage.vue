@@ -5,7 +5,6 @@
       :navigation="!isDone && carouselCount > 1"
       :modules="modules"
       :allowTouchMove="false"
-      :loop="true"
       :autoplay="swiperAutoplay"
       :pagination="isPagination"
       :spaceBetween="50"
@@ -66,6 +65,7 @@
 import { ref, defineComponent, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useMonitoringStore } from 'stores/monitoring'
+import { storeToRefs } from 'pinia'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/css'
 import 'swiper/css/pagination'
@@ -82,6 +82,25 @@ export default defineComponent({
   },
   setup () {
     const $store = useMonitoringStore()
+    const { toggleControl } = storeToRefs($store)
+
+    watch(toggleControl, (to) => {
+      if (to && swiperRef.value.autoplay !== undefined) {
+        swiperRef.value.autoplay.stop()
+        swiperRef.value.slideTo(0)
+      }
+
+      if (!to && swiperRef.value.autoplay !== undefined) {
+        swiperRef.value.autoplay.start()
+      }
+    },
+    )
+
+    // watch(slideIndex, (to) => {
+    //   console.log(`swiperRef.value.slideTo(${to})`)
+    //   swiperRef.value.slideTo(to)
+    // })
+
     const router = useRouter()
     const route = useRoute()
 
@@ -140,9 +159,11 @@ export default defineComponent({
 
     window.myWindowAPI.receive('controlEditModeOn', function (args) {
       this.isDone = false
-      if (this.swiperRef.autoplay !== undefined) {
-        this.swiperRef.autoplay.stop()
-      }
+    }.bind(this))
+
+    window.myWindowAPI.receive('getSlideIndex', function (args) {
+      console.log('getSlideIndex : ' + args)
+      this.swiperRef.slideTo(args)
     }.bind(this))
   },
   computed: {
@@ -161,7 +182,13 @@ export default defineComponent({
       return this.isDone ? 'column full-height no-padding' : 'column full-height'
     },
     isPagination () {
-      return this.isDone ? false : { clickable: true }
+      const pagination = {
+        clickable: true,
+        renderBullet: function (index, className) {
+          return '<span class="' + className + '">' + (index + 1) + "</span>";
+        },
+      }
+      return this.isDone ? false : pagination
     },
     swiperClass () {
       return this.isDone ? 'done-mode' : 'edit-mode'
@@ -177,7 +204,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .done-mode {
   height: calc(100vh - 32px);
 }
@@ -203,5 +230,21 @@ export default defineComponent({
 
 .custom-panels {
   height: calc(100% - 48px);
+}
+
+.swiper-pagination-bullet {
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 20px;
+  font-size: 12px;
+  color: #000;
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.swiper-pagination-bullet-active {
+  color: #fff;
+  background: #007aff;
 }
 </style>
