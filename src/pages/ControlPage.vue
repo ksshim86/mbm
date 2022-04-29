@@ -53,8 +53,30 @@
         </swiper>
       </div>
     </div>
-    <q-btn @click="controlEditModeOn">에디트 모드 온</q-btn>
-    <q-btn @click="controlSelectUrlOn">1-1-1 재입력 버튼</q-btn>
+    <div class="q-pa-md q-gutter-xs">
+      <q-btn
+        icon="replay"
+        label="re-enter url"
+        color="orange"
+        text-color="grey-9"
+        :disable="toggle === ''"
+        @click="controlSelectUrlOn"
+      />
+      <q-btn
+        icon="zoom_in"
+        label="zoom in"
+        color="orange"
+        text-color="grey-9"
+        :disable="toggle === ''"
+      />
+      <q-btn
+        icon="zoom_out"
+        label="zoom out"
+        color="orange"
+        text-color="grey-9"
+        :disable="toggle === ''"
+      />
+    </div>
   </div>
 </template>
 
@@ -101,6 +123,7 @@ export default defineComponent({
     }
 
     const setSlideIndex = (slideIndex) => {
+      toggle.value = ''
       $store.setSlideIndex(slideIndex)
     }
 
