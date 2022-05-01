@@ -83,7 +83,7 @@ export default defineComponent({
     },
     colClass () {
       const colMaxClassNum = 12
-      return `col-${colMaxClassNum / this.colCount} custom-col row justify-center items-center`
+      return `col-${colMaxClassNum / this.colCount} bg-dark custom-col row justify-center items-center`
     },
     millisecond () {
       return this.carouselInterval * 1000

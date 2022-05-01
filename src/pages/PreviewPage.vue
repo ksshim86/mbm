@@ -19,7 +19,7 @@
       </div>
       <div class="col-8">
         <q-badge color="secondary">
-          Carousel Count: {{ carouselCount }}
+          Slide Count: {{ carouselCount }}
         </q-badge>
         <q-slider
           v-model="carouselCount"
@@ -31,7 +31,7 @@
         >
         </q-slider>
         <q-badge color="secondary">
-          Carousel Interval: {{ carouselInterval }} sec
+          Slide Interval: {{ carouselInterval }} sec
         </q-badge>
         <q-input
           v-model.number="carouselInterval"
@@ -74,14 +74,14 @@
     <q-footer>
       <q-btn-group spread>
         <q-btn
-          color="dark"
+          class="custom-btn"
           text-color="orange"
-          label="Back"
+          label="Prev"
           icon="arrow_back"
           @click="handleBackBtnClicked"
         />
         <q-btn
-          color="dark"
+          class="custom-btn"
           text-color="orange"
           label="Next"
           icon-right="arrow_forward"
@@ -147,6 +147,10 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 #bar {
+  background-color: #202225;
+}
+
+.custom-btn {
   background-color: #202225;
 }
 

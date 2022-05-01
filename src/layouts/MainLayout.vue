@@ -3,7 +3,7 @@
     <q-header>
       <main-bar />
     </q-header>
-    <q-page-container class="container">
+    <q-page-container class="bg-dark">
       <router-view />
     </q-page-container>
   </q-layout>

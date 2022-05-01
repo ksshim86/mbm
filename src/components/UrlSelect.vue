@@ -6,7 +6,7 @@
     >
       <q-tabs
         v-model="tab"
-        class="text-teal"
+        class="bg-dark text-teal"
       >
         <q-tab
           name="input"
@@ -30,12 +30,14 @@
           <q-input
             v-model="urlInput"
             type="text"
+            color="teal"
             dense
             hint="input url"
             class="custom-input q-pb-md"
           >
             <template v-slot:after>
               <q-btn
+                color="teal"
                 round
                 dense
                 flat

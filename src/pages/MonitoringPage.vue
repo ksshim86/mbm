@@ -43,14 +43,14 @@
     <q-footer v-if="!isDone">
       <q-btn-group spread>
         <q-btn
-          color="dark"
+          class="bg-deepDark"
           text-color="orange"
-          label="Back"
+          label="Prev"
           icon="arrow_back"
           @click="handlePrevBtnClicked"
         />
         <q-btn
-          color="dark"
+          class="bg-deepDark"
           text-color="orange"
           label="Done"
           icon="done"
@@ -163,6 +163,7 @@ export default defineComponent({
     }.bind(this))
 
     window.myWindowAPI.receive('goMain', function (args) {
+      this.isDone = false
       this.router.push('/')
     }.bind(this))
   },
@@ -240,11 +241,11 @@ export default defineComponent({
   font-size: 12px;
   color: #000;
   opacity: 1;
-  background: rgba(0, 0, 0, 0.2);
+  background: aliceblue;
 }
 
 .swiper-pagination-bullet-active {
   color: #fff;
-  background: #007aff;
+  background: #009688;
 }
 </style>

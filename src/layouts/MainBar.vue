@@ -62,6 +62,9 @@ export default {
 
     watch(isDone, function (to, from) {
       editIsDone.value = to
+      if (!to) {
+        toggleControl.value = false
+      }
     })
 
     const toggleControl = ref(false)
@@ -99,7 +102,7 @@ export default {
     }
   },
   created () {
-    window.myWindowAPI.receive('controlWindowClose', function (args) {
+    window.myWindowAPI.receive('controlWindowClose', function () {
       this.toggleControl = false
     }.bind(this))
   },
