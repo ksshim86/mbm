@@ -217,7 +217,6 @@ export default defineComponent({
 
 .custom-col {
   border: 1px solid;
-  background-color: white;
 }
 
 .custom-carousel {
