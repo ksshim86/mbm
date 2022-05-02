@@ -54,17 +54,15 @@
         >
           <q-select
             dense
-            :model-value="model"
+            v-model="model"
             use-input
             hide-selected
             fill-input
             input-debounce="0"
             :options="options"
             @filter="filterFn"
-            @input-value="setModel"
             hint="Text autocomplete"
             class="custom-input"
-            disable
           >
             <template v-slot:no-option>
               <q-item>
@@ -72,6 +70,16 @@
                   No results
                 </q-item-section>
               </q-item>
+            </template>
+            <template v-slot:after>
+              <q-btn
+                color="orange"
+                round
+                dense
+                flat
+                icon="send"
+                @click="handleUrlInputClicked"
+              />
             </template>
           </q-select>
         </q-tab-panel>
@@ -82,7 +90,7 @@
       ref="webview"
       class="full-height full-width"
       :id="`webview${rowIdx}-${colIdx}`"
-      :src="urlInput"
+      :src="webViewUrl"
       allowpopups
       webPreferences="nativeWindowOpen"
       :partition="`partition${rowIdx}-${colIdx}`"
@@ -94,14 +102,12 @@
 <script>
 import { ref, defineComponent } from 'vue'
 
-const stringOptions = [
-  'Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'
-].reduce((acc, opt) => {
-  for (let i = 1; i <= 5; i++) {
-    acc.push(opt + ' ' + i)
-  }
-  return acc
-}, [])
+// defineProps({
+//   carouselIdx: Number,
+//   rowIdx: Number,
+//   colIdx: Number,
+//   bookmarks: [],
+// })
 
 export default defineComponent({
   name: 'UrlSelect',
@@ -109,38 +115,48 @@ export default defineComponent({
     carouselIdx: Number,
     rowIdx: Number,
     colIdx: Number,
+    bookmarks: [],
   },
-  setup () {
+  setup (props) {
+    const tab = ref('input')
     const model = ref(null)
-    const options = ref(stringOptions)
     const urlInput = ref('')
+    const webViewUrl = ref('')
     const isEdit = ref(true)
-    const handleUrlInputClicked = () => {
-      isEdit.value = false
-    }
-
     // const idx = `${carouselIdx}-${rowIdx}-${colIdx}`
 
     // window.myWindowAPI.receive(`editOn-${idx}`, function (args) {
     //   isEdit.value = true
     // })
+    const options = ref(props.bookmarks)
+
+    const filterFn = function (val, update, abort) {
+      const bookmarks = props.bookmarks
+      update(function () {
+        const needle = val.toLocaleLowerCase()
+        options.value = bookmarks.filter(v => v.value.toLocaleLowerCase().indexOf(needle) > -1)
+      })
+    }
+
+    const handleUrlInputClicked = () => {
+      if (tab.value === 'input') {
+        webViewUrl.value = urlInput.value
+      } else {
+        webViewUrl.value = model.value.value
+      }
+
+      isEdit.value = false
+    }
 
     return {
+      options,
       isEdit,
       urlInput,
+      webViewUrl,
       model,
-      options,
-      tab: ref('input'),
-      filterFn (val, update, abort) {
-        update(() => {
-          const needle = val.toLocaleLowerCase()
-          options.value = stringOptions.filter(v => v.toLocaleLowerCase().indexOf(needle) > -1)
-        })
-      },
+      tab,
+      filterFn,
       handleUrlInputClicked,
-      setModel (val) {
-        model.value = val
-      },
     }
   },
   created () {

@@ -2,6 +2,7 @@ import { app, BrowserWindow, ipcMain, nativeTheme } from 'electron'
 import { initialize, enable } from '@electron/remote/main'
 import path from 'path'
 import os from 'os'
+import Dao from './dao'
 
 // needed in case process is undefined under Linux
 const platform = process.platform || os.platform()
@@ -15,6 +16,7 @@ try {
 initialize()
 
 let mainWindow
+let sqliteDao
 
 function createWindow () {
   /**
@@ -65,6 +67,8 @@ function createWindow () {
   mainWindow.on('closed', () => {
     mainWindow = null
   })
+
+  sqliteDao = new Dao()
 }
 
 app.whenReady().then(createWindow)
@@ -175,4 +179,23 @@ ipcMain.handle('commandGoMain', () => {
   }
 
   mainWindow.webContents.send('goMain')
+})
+
+ipcMain.handle('selectBookmarks', async () => {
+  const obj = {
+    result: true,
+    message: '',
+    rows: {},
+  }
+  const sql = `SELECT * FROM BOOKMARK WHERE DEL_YN = 'N'`
+  
+  try {
+    const res = await sqliteDao.all(sql)
+    obj.rows = res.rows
+  } catch (error) {
+    obj.result = false
+    obj.message = error.message
+  }
+
+  return obj
 })

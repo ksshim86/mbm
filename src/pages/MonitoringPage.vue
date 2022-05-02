@@ -32,6 +32,7 @@
                     :carouselIdx=carouselIdx
                     :rowIdx=rowIdx
                     :colIdx=colIdx
+                    :bookmarks=bookmarks
                   />
                 </div>
               </div>
@@ -104,6 +105,8 @@ export default defineComponent({
     const rowCount = ref(Number(route.params.rowCount))
     const colCount = ref(Number(route.params.colCount))
 
+    const bookmarks = ref({})
+
     const isDone = ref(false)
     watch(isDone, function (to, from) {
       $store.setIsDone(to)
@@ -146,6 +149,11 @@ export default defineComponent({
       colCount,
       slide: ref(1),
       router,
+      bookmarks,
+      async fetchBookmarks () {
+        await $store.fetchBookmarks()
+        bookmarks.value = $store.bookmarks
+      },
     }
   },
   created () {
@@ -166,6 +174,8 @@ export default defineComponent({
       this.isDone = false
       this.router.push('/')
     }.bind(this))
+
+    this.fetchBookmarks()
   },
   computed: {
     rowClass () {
