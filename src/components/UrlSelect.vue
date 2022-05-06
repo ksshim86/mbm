@@ -9,12 +9,12 @@
         class="bg-dark text-orange"
       >
         <q-tab
-          name="input"
-          label="Input"
-        />
-        <q-tab
           name="bookmark"
           label="Bookmark"
+        />
+        <q-tab
+          name="input"
+          label="Input"
         />
       </q-tabs>
       <q-separator />
@@ -23,31 +23,6 @@
         animated
         class="row custom-panels"
       >
-        <q-tab-panel
-          name="input"
-          class="row col justify-center items-center custom-panel q-pa-sm"
-        >
-          <q-input
-            v-model="urlInput"
-            type="text"
-            color="orange"
-            dense
-            hint="input url"
-            class="custom-input q-pb-md"
-          >
-            <template v-slot:after>
-              <q-btn
-                color="orange"
-                round
-                dense
-                flat
-                icon="send"
-                @click="handleUrlInputClicked"
-              />
-            </template>
-          </q-input>
-        </q-tab-panel>
-
         <q-tab-panel
           name="bookmark"
           class="row col justify-center items-center custom-panel q-pa-sm"
@@ -58,6 +33,7 @@
             use-input
             hide-selected
             fill-input
+            color="orange"
             input-debounce="0"
             :options="options"
             @filter="filterFn"
@@ -82,6 +58,30 @@
               />
             </template>
           </q-select>
+        </q-tab-panel>
+        <q-tab-panel
+          name="input"
+          class="row col justify-center items-center custom-panel q-pa-sm"
+        >
+          <q-input
+            v-model="urlInput"
+            type="text"
+            color="orange"
+            dense
+            hint="input url"
+            class="custom-input q-pb-md"
+          >
+            <template v-slot:after>
+              <q-btn
+                color="orange"
+                round
+                dense
+                flat
+                icon="send"
+                @click="handleUrlInputClicked"
+              />
+            </template>
+          </q-input>
         </q-tab-panel>
       </q-tab-panels>
     </div>
@@ -111,7 +111,7 @@ export default defineComponent({
     bookmarks: [],
   },
   setup (props) {
-    const tab = ref('input')
+    const tab = ref('bookmark')
     const model = ref(null)
     const urlInput = ref('')
     const webViewUrl = ref('')
