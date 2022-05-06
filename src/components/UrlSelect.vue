@@ -1,7 +1,7 @@
 <template>
   <div class="full-height">
     <div
-      v-show="isEdit"
+      v-if="isEdit"
       class="full-height"
     >
       <q-tabs
@@ -86,7 +86,7 @@
       </q-tab-panels>
     </div>
     <webview
-      v-show="!isEdit"
+      v-else
       ref="webview"
       class="full-height full-width"
       :id="`webview${rowIdx}-${colIdx}`"
