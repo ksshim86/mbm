@@ -73,6 +73,7 @@ contextBridge.exposeInMainWorld('myWindowAPI', {
     let validChannels = ['back', 'controlEditModeOn', 'controlSelectUrlOn',
       'controlWindowClose', 'getSlideIndex', 'zoomIn', 'zoomOut', 'goMain']
     if (validChannels.filter(valid => channel.indexOf(valid) > -1)) {
+      ipcRenderer.removeAllListeners(channel)
       ipcRenderer.on(channel, (event, ...args) => func(...args))
     }
   }

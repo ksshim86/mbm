@@ -1,7 +1,7 @@
 <template>
   <div class="full-height">
     <div
-      v-if="isEdit"
+      v-show="isEdit"
       class="full-height"
     >
       <q-tabs
@@ -86,7 +86,7 @@
       </q-tab-panels>
     </div>
     <webview
-      v-else
+      v-show="!isEdit"
       ref="webview"
       class="full-height full-width"
       :id="`webview${rowIdx}-${colIdx}`"
@@ -100,14 +100,7 @@
 </template>
 
 <script>
-import { ref, defineComponent } from 'vue'
-
-// defineProps({
-//   carouselIdx: Number,
-//   rowIdx: Number,
-//   colIdx: Number,
-//   bookmarks: [],
-// })
+import { ref, defineComponent, onMounted } from 'vue'
 
 export default defineComponent({
   name: 'UrlSelect',
@@ -123,11 +116,6 @@ export default defineComponent({
     const urlInput = ref('')
     const webViewUrl = ref('')
     const isEdit = ref(true)
-    // const idx = `${carouselIdx}-${rowIdx}-${colIdx}`
-
-    // window.myWindowAPI.receive(`editOn-${idx}`, function (args) {
-    //   isEdit.value = true
-    // })
     const options = ref(props.bookmarks)
 
     const filterFn = function (val, update, abort) {
@@ -148,7 +136,32 @@ export default defineComponent({
       isEdit.value = false
     }
 
+    const webview = ref(null)
+
+    onMounted(() => {
+      const idx = `${props.carouselIdx}-${props.rowIdx}-${props.colIdx}`
+
+      const selectUrlOnFunc = function (args) {
+        isEdit.value = true
+      }
+
+      const zoomInFunc = function (args) {
+        const zoomLevel = Number(webview.value.getZoomLevel())
+        webview.value.setZoomLevel(zoomLevel + 1)
+      }
+
+      const zoomOutFunc = function (args) {
+        const zoomLevel = Number(webview.value.getZoomLevel())
+        webview.value.setZoomLevel(zoomLevel - 1)
+      }
+
+      window.myWindowAPI.receive(`controlSelectUrlOn-${idx}`, selectUrlOnFunc)
+      window.myWindowAPI.receive(`zoomIn-${idx}`, zoomInFunc)
+      window.myWindowAPI.receive(`zoomOut-${idx}`, zoomOutFunc)
+    })
+
     return {
+      webview,
       options,
       isEdit,
       urlInput,
@@ -158,25 +171,6 @@ export default defineComponent({
       filterFn,
       handleUrlInputClicked,
     }
-  },
-  created () {
-    const idx = `${this.carouselIdx}-${this.rowIdx}-${this.colIdx}`
-
-    window.myWindowAPI.receive(`controlSelectUrlOn-${idx}`, function (args) {
-      this.isEdit = true
-    }.bind(this))
-
-    window.myWindowAPI.receive(`zoomIn-${idx}`, function (args) {
-      const webview = this.$refs.webview
-      const zoomLevel = Number(webview.getZoomLevel())
-      webview.setZoomLevel(zoomLevel + 1)
-    }.bind(this))
-
-    window.myWindowAPI.receive(`zoomOut-${idx}`, function (args) {
-      const webview = this.$refs.webview
-      const zoomLevel = Number(webview.getZoomLevel())
-      webview.setZoomLevel(zoomLevel - 1)
-    }.bind(this))
   },
 })
 </script>
