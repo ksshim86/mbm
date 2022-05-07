@@ -17,8 +17,6 @@ export default defineComponent({
   components: { MainBar },
   name: 'MainLayout',
   setup () {
-    const leftDrawerOpen = ref(false)
-
     return {
     }
   }
