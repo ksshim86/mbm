@@ -46,7 +46,7 @@
             color="orange"
             text-color="black"
             label="Bookmark"
-            disable
+            @click="handleBookmarkBtnClicked"
           />
         </div>
       </div>
@@ -67,8 +67,13 @@ export default defineComponent({
       router.push('/preview')
     }
 
+    const handleBookmarkBtnClicked = () => {
+      router.push('/bookmark')
+    }
+
     return {
       handleStartBtnClicked,
+      handleBookmarkBtnClicked,
     }
   }
 })
