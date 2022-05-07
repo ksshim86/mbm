@@ -187,7 +187,7 @@ ipcMain.handle('selectBookmarks', async () => {
     message: '',
     rows: {},
   }
-  const sql = `SELECT * FROM BOOKMARK WHERE DEL_YN = 'N'`
+  const sql = `SELECT * FROM bookmark WHERE del_yn = 'N'`
   
   try {
     const res = await sqliteDao.all(sql)
