@@ -52,12 +52,12 @@ import { storeToRefs } from 'pinia'
 export default {
   name: 'MainBar',
   setup () {
-    const $store = useMonitoringStore()
-    const { isDone } = storeToRefs($store)
+    const store = useMonitoringStore()
+    const { isDone } = storeToRefs(store)
     const route = useRoute()
     const editIsDone = ref(false)
     watch(route, function (to, from, next) {
-      editIsDone.value = $store.getIsDone
+      editIsDone.value = store.getIsDone
     }.bind(this), { flush: 'pre', immediate: true, deep: true })
 
     watch(isDone, function (to, from) {
@@ -69,7 +69,7 @@ export default {
 
     const toggleControl = ref(false)
     watch(toggleControl, (newVal) => {
-      $store.setToggleControl(newVal)
+      store.setToggleControl(newVal)
       window.myWindowAPI.toggleControl(newVal)
     })
 
@@ -92,7 +92,7 @@ export default {
     }
 
     return {
-      $store,
+      store,
       editIsDone,
       route,
       toggleControl,
