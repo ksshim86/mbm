@@ -82,8 +82,8 @@ export default defineComponent({
     UrlSelect,
   },
   setup () {
-    const $store = useMonitoringStore()
-    const { toggleControl } = storeToRefs($store)
+    const store = useMonitoringStore()
+    const { toggleControl } = storeToRefs(store)
 
     watch(toggleControl, (to) => {
       if (to && swiperRef.value.autoplay !== undefined) {
@@ -105,11 +105,11 @@ export default defineComponent({
     const rowCount = ref(Number(route.params.rowCount))
     const colCount = ref(Number(route.params.colCount))
 
-    const bookmarks = ref({})
+    const bookmarks = ref([])
 
     const isDone = ref(false)
     watch(isDone, function (to, from) {
-      $store.setIsDone(to)
+      store.setIsDone(to)
     }.bind(this))
 
     const swiperRef = ref(null)
@@ -151,8 +151,14 @@ export default defineComponent({
       router,
       bookmarks,
       async fetchBookmarks () {
-        await $store.fetchBookmarks()
-        bookmarks.value = $store.bookmarks
+        await store.fetchBookmarks()
+
+        store.bookmarks.forEach(row => {
+          const obj = {}
+          obj.label = row.name
+          obj.value = row.url
+          bookmarks.value.push(obj)
+        })
       },
     }
   },
