@@ -1,7 +1,7 @@
-CREATE TABLE BOOKMARK (ID INTEGER PRIMARY KEY AUTOINCREMENT, NAME TEXT NOT NULL, URL TEXT NOT NULL, DEL_YN TEXT NOT NULL DEFAULT 'N');
+CREATE TABLE bookmark (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, url TEXT NOT NULL, del_yn TEXT NOT NULL DEFAULT 'N');
 
-INSERT INTO BOOKMARK(NAME, URL) VALUES ('google', 'https://google.com');
-INSERT INTO BOOKMARK(NAME, URL) VALUES ('github', 'https://github.com');
-INSERT INTO BOOKMARK(NAME, URL) VALUES ('youtube', 'https://youtube.com');
+INSERT INTO bookmark(name, url) VALUES ('google', 'https://google.com');
+INSERT INTO bookmark(name, url) VALUES ('github', 'https://github.com');
+INSERT INTO bookmark(name, url) VALUES ('youtube', 'https://youtube.com');
 
-SELECT * FROM BOOKMARK WHERE DEL_YN = 'N';
+SELECT * FROM bookmark WHERE del_yn = 'N';
