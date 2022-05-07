@@ -108,7 +108,7 @@ export default defineComponent({
     carouselIdx: Number,
     rowIdx: Number,
     colIdx: Number,
-    bookmarks: [],
+    bookmarks: Array,
   },
   setup (props) {
     const tab = ref('bookmark')
