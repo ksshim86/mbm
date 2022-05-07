@@ -74,14 +74,14 @@
     <q-footer>
       <q-btn-group spread>
         <q-btn
-          class="custom-btn"
+          class="bg-deepDark"
           text-color="orange"
           label="Prev"
           icon="arrow_back"
           @click="handleBackBtnClicked"
         />
         <q-btn
-          class="custom-btn"
+          class="bg-deepDark"
           text-color="orange"
           label="Next"
           icon-right="arrow_forward"
@@ -147,10 +147,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 #bar {
-  background-color: #202225;
-}
-
-.custom-btn {
   background-color: #202225;
 }
 
