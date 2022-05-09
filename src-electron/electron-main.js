@@ -199,3 +199,26 @@ ipcMain.handle('selectBookmarks', async () => {
 
   return obj
 })
+
+ipcMain.handle('updateBookmark', async (event, args) => {
+  const obj = {
+    result: true,
+    message: '',
+    rows: {},
+  }
+  const sql = `UPDATE bookmark SET name = ?, url = ? WHERE id = ?`
+  
+  try {
+    const bookmark = JSON.parse(JSON.stringify(args))
+    const params = [bookmark.name, bookmark.url, bookmark.id]
+
+    const res = await sqliteDao.run(sql, params)
+
+    obj.result = res.result
+  } catch (error) {
+    obj.result = false
+    obj.message = error.message
+  }
+
+  return obj
+})

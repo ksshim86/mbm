@@ -137,10 +137,14 @@ export default defineComponent({
     const filter = ref('')
     let itemKey = -1
 
-    watch(bookmarks, (to) => {
+    watch(bookmarks, async (to) => {
       if (itemKey > -1) {
         // update 치면 된다.
-        console.log(to[itemKey - 1])
+        const bookmark = JSON.parse(JSON.stringify(to[itemKey - 1]))
+
+        await store.updateBookmark(bookmark)
+
+        itemKey = -1
       }
     }, { deep: true })
 
