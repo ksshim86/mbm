@@ -71,6 +71,12 @@ contextBridge.exposeInMainWorld('myWindowAPI', {
   async updateBookmark (bookmark) {
     return await ipcRenderer.invoke('updateBookmark', bookmark)
   },
+  async insertBookmark (bookmark) {
+    return await ipcRenderer.invoke('insertBookmark', bookmark)
+  },
+  async deleteBookmark (id) {
+    return await ipcRenderer.invoke('deleteBookmark', id)
+  },
 
   receive: (channel, func) => {
     let validChannels = ['back', 'controlEditModeOn', 'controlSelectUrlOn',

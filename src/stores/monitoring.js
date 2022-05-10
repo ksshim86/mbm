@@ -37,5 +37,19 @@ export const useMonitoringStore = defineStore('monitoring', {
     async updateBookmark (bookmark) {
       return await window.myWindowAPI.updateBookmark(bookmark)
     },
+    async insertBookmark (bookmark) {
+      const res = await window.myWindowAPI.insertBookmark(bookmark)
+
+      if (res.result) {
+        this.fetchBookmarks()
+      }
+    },
+    async deleteBookmark (id) {
+      const res = await window.myWindowAPI.deleteBookmark(id)
+
+      if (res.result) {
+        this.fetchBookmarks()
+      }
+    },
   }
 })

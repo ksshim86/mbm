@@ -188,7 +188,7 @@ ipcMain.handle('selectBookmarks', async () => {
     rows: {},
   }
   const sql = `SELECT * FROM bookmark WHERE del_yn = 'N'`
-  
+
   try {
     const res = await sqliteDao.all(sql)
     obj.rows = res.rows
@@ -207,10 +207,55 @@ ipcMain.handle('updateBookmark', async (event, args) => {
     rows: {},
   }
   const sql = `UPDATE bookmark SET name = ?, url = ? WHERE id = ?`
-  
+
   try {
     const bookmark = JSON.parse(JSON.stringify(args))
     const params = [bookmark.name, bookmark.url, bookmark.id]
+
+    const res = await sqliteDao.run(sql, params)
+
+    obj.result = res.result
+  } catch (error) {
+    obj.result = false
+    obj.message = error.message
+  }
+
+  return obj
+})
+
+ipcMain.handle('insertBookmark', async (event, args) => {
+  const obj = {
+    result: true,
+    message: '',
+    rows: {},
+  }
+  const sql = `INSERT INTO bookmark (name, url) VALUES (?, ?)`
+
+  try {
+    const bookmark = JSON.parse(JSON.stringify(args))
+    const params = [bookmark.name, bookmark.url]
+
+    const res = await sqliteDao.run(sql, params)
+
+    obj.result = res.result
+  } catch (error) {
+    obj.result = false
+    obj.message = error.message
+  }
+
+  return obj
+})
+
+ipcMain.handle('deleteBookmark', async (event, args) => {
+  const obj = {
+    result: true,
+    message: '',
+    rows: {},
+  }
+  const sql = `UPDATE bookmark SET DEL_YN = 'Y' WHERE id = ?`
+
+  try {
+    const params = [args]
 
     const res = await sqliteDao.run(sql, params)
 
