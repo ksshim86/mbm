@@ -19,6 +19,7 @@
         v-if="editIsDone"
         v-model="toggleControl"
         color="orange"
+        dense
         label="Control On/Off"
         left-label
       />

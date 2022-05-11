@@ -6,6 +6,7 @@ const routes = [
     children: [
       { path: '', component: () => import('pages/IndexPage.vue') },
       { path: 'bookmark', component: () => import('src/pages/BookmarkPage.vue') },
+      { path: 'favorite', component: () => import('src/pages/FavoritePage.vue') },
       { path: 'preview', component: () => import('src/pages/PreviewPage.vue') },
       { name: 'monitoring', path: 'monitoring', props: true, component: () => import('src/pages/MonitoringPage.vue') },
     ]

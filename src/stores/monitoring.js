@@ -6,6 +6,7 @@ export const useMonitoringStore = defineStore('monitoring', {
     isDone: false,
     slideIndex: 0,
     bookmarks: [],
+    favorite: [],
   }),
 
   getters: {
@@ -43,6 +44,8 @@ export const useMonitoringStore = defineStore('monitoring', {
       if (res.result) {
         this.fetchBookmarks()
       }
+
+      return res
     },
     async deleteBookmark (id) {
       const res = await window.myWindowAPI.deleteBookmark(id)
@@ -50,6 +53,12 @@ export const useMonitoringStore = defineStore('monitoring', {
       if (res.result) {
         this.fetchBookmarks()
       }
+
+      return res
+    },
+    async selectFavoriteMonitoring (id) {
+      const res = await window.myWindowAPI.selectFavoriteMonitoring(id)
+      this.favorite = res.rows
     },
   }
 })

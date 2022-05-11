@@ -105,18 +105,24 @@ import { ref, defineComponent, onMounted } from 'vue'
 export default defineComponent({
   name: 'UrlSelect',
   props: {
-    carouselIdx: Number,
+    slideIdx: Number,
     rowIdx: Number,
     colIdx: Number,
     bookmarks: Array,
+    url: String,
   },
   setup (props) {
     const tab = ref('bookmark')
     const model = ref(null)
     const urlInput = ref('')
-    const webViewUrl = ref('')
+    const webViewUrl = ref(props.url)
     const isEdit = ref(true)
     const options = ref(props.bookmarks)
+
+    // 즐겨찾기로 호출된 경우
+    if (webViewUrl.value.length > 0) {
+      isEdit.value = false
+    }
 
     const filterFn = function (val, update, abort) {
       const bookmarks = props.bookmarks
@@ -139,7 +145,7 @@ export default defineComponent({
     const webview = ref(null)
 
     onMounted(() => {
-      const idx = `${props.carouselIdx}-${props.rowIdx}-${props.colIdx}`
+      const idx = `${props.slideIdx}-${props.rowIdx}-${props.colIdx}`
 
       const selectUrlOnFunc = function (args) {
         isEdit.value = true

@@ -39,9 +39,9 @@
         class="full-height"
       >
         <q-carousel-slide
-          v-for="carouselIdx in carouselCount"
-          :key="carouselIdx"
-          :name="carouselIdx"
+          v-for="slideIdx in slideCount"
+          :key="slideIdx"
+          :name="slideIdx"
           class="column full-height no-padding"
         >
           <div
@@ -55,7 +55,7 @@
                 v-for="colIdx in colCount"
                 :key="colIdx"
               >
-                {{ carouselIdx }} x {{ rowIdx }} x {{ colIdx }}
+                {{ slideIdx }} x {{ rowIdx }} x {{ colIdx }}
               </div>
             </div>
           </div>
@@ -71,8 +71,8 @@ import { ref, defineComponent } from 'vue'
 export default defineComponent({
   name: 'PreviewMbm',
   props: {
-    carouselCount: Number,
-    carouselInterval: Number,
+    slideCount: Number,
+    slideInterval: Number,
     rowCount: Number,
     colCount: Number,
   },
@@ -86,7 +86,7 @@ export default defineComponent({
       return `col-${colMaxClassNum / this.colCount} bg-dark custom-col row justify-center items-center`
     },
     millisecond () {
-      return this.carouselInterval * 1000
+      return this.slideInterval * 1000
     },
   },
   setup () {

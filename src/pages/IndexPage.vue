@@ -37,7 +37,7 @@
             color="orange"
             text-color="black"
             label="Favorite Monitoring"
-            disable
+            @click="handleFavoriteBtnClicked"
           />
         </div>
         <div class="col-sm-6 q-pl-sm">
@@ -71,9 +71,14 @@ export default defineComponent({
       router.push('/bookmark')
     }
 
+    const handleFavoriteBtnClicked = () => {
+      router.push('/favorite')
+    }
+
     return {
       handleStartBtnClicked,
       handleBookmarkBtnClicked,
+      handleFavoriteBtnClicked,
     }
   }
 })

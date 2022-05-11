@@ -74,6 +74,9 @@
                   title="Update name"
                   buttons
                   color="orange"
+                  style="width: 250px;"
+                  :validate="nameValidation"
+                  @hide="nameValidation"
                   @save="editingName(props)"
                 >
                   <q-input
@@ -81,6 +84,9 @@
                     dense
                     autofocus
                     color="orange"
+                    :error="errorName"
+                    :error-message="errorMessageName"
+                    @keyup.enter="scope.set"
                   />
                 </q-popup-edit>
               </q-td>
@@ -95,6 +101,8 @@
                   title="Update url"
                   buttons
                   color="orange"
+                  :validate="urlValidation"
+                  @hide="urlValidation"
                   @save="editingUrl(props)"
                 >
                   <q-input
@@ -102,6 +110,9 @@
                     dense
                     autofocus
                     color="orange"
+                    :error="errorUrl"
+                    :error-message="errorMessageUrl"
+                    @keyup.enter="scope.set"
                   />
                 </q-popup-edit>
               </q-td>
@@ -110,9 +121,16 @@
                   size="sm"
                   color="orange"
                   round
+                  outline
                   @click="deleteBookmark(props.row.id)"
                   icon="delete"
-                />
+                >
+                  <q-tooltip
+                    class="bg-deepDark"
+                    anchor="center right"
+                    self="center left"
+                  >delete</q-tooltip>
+                </q-btn>
               </q-td>
             </q-tr>
           </template>
@@ -124,8 +142,8 @@
         <q-btn
           class="custom-btn bg-deepDark"
           text-color="orange"
-          label="Prev"
-          icon="arrow_back"
+          label="Main"
+          icon="first_page"
           @click="handleBackBtnClicked"
         />
       </q-btn-group>
@@ -152,7 +170,7 @@
           </div>
         </q-card-section>
         <q-form
-          @submit="saveBookmark"
+          @submit="addBookmark"
           ref="newForm"
         >
           <q-card-section class="q-pt-none">
@@ -180,7 +198,10 @@
                 type="text"
                 color="orange"
                 dense
-                :rules="[val => !!val || 'Url is required']"
+                :rules="[
+                  val => !!val || 'Url is required',
+                  val => val.length <= 150 || 'Please use maximum 150 characters'
+                ]"
               />
             </div>
           </q-card-section>
@@ -215,7 +236,7 @@ import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 
 const columns = [
-  { name: '#', label: '#', field: 'index', align: 'center', sortable: true, },
+  { name: '#', label: '#', field: 'index', align: 'center' },
   { name: 'name', label: 'Name', align: 'left', field: 'name', sortable: true },
   { name: 'url', label: 'Url', align: 'left', field: 'url', sortable: true },
 ]
@@ -234,13 +255,33 @@ export default defineComponent({
     })
     const card = ref(false)
     const newForm = ref(null)
-    let itemKey = -1
+    let rowIndex = -1
 
     watch(bookmarks, async (to) => {
-      if (itemKey > -1) {
-        const bookmark = JSON.parse(JSON.stringify(to[itemKey - 1]))
-        await store.updateBookmark(bookmark)
-        itemKey = -1
+      if (rowIndex > -1) {
+        const bookmark = JSON.parse(JSON.stringify(to[rowIndex]))
+        const res = await store.updateBookmark(bookmark)
+        rowIndex = -1
+
+        if (res.result) {
+          quasar.notify({
+            message: 'Update completed',
+            type: 'positive',
+            textColor: 'dark',
+            position: 'bottom-right',
+            progress: true,
+            timeout: 2500,
+          })
+        } else {
+          quasar.notify({
+            message: 'Update failed',
+            type: 'negative',
+            textColor: 'dark',
+            position: 'bottom-right',
+            progress: true,
+            timeout: 2500,
+          })
+        }
       }
     }, { deep: true })
 
@@ -248,27 +289,115 @@ export default defineComponent({
       router.push('/')
     }
 
+    const errorName = ref(false)
+    const errorMessageName = ref('')
+    const nameValidation = (val) => {
+      if (val === undefined) {
+        errorName.value = false
+        errorMessageName.value = ''
+        return false
+      } else if (val.length === 0) {
+        errorName.value = true
+        errorMessageName.value = 'Name is required'
+        return false
+      } else if (val.length > 10) {
+        errorName.value = true
+        errorMessageName.value = 'Please use maximum 10 characters'
+        return false
+      }
+
+      errorName.value = false
+      errorMessageName.value = ''
+
+      return true
+    }
+
+    const errorUrl = ref(false)
+    const errorMessageUrl = ref('')
+    const urlValidation = (val) => {
+      if (val === undefined) {
+        errorUrl.value = false
+        errorMessageUrl.value = ''
+        return false
+      } else if (val.length === 0) {
+        errorUrl.value = true
+        errorMessageUrl.value = 'Url is required'
+        return false
+      } else if (val.length > 150) {
+        errorUrl.value = true
+        errorMessageUrl.value = 'Please use maximum 150 characters'
+        return false
+      }
+
+      errorUrl.value = false
+      errorMessageUrl.value = ''
+
+      return true
+    }
+
     const editingName = (item) => {
-      itemKey = item.key
+      rowIndex = item.rowIndex
     }
 
     const editingUrl = (item) => {
-      itemKey = item.key
+      rowIndex = item.rowIndex
     }
 
-    const saveBookmark = async () => {
-      await store.insertBookmark(JSON.parse(JSON.stringify(newBookmark.value)))
+    const addBookmark = async () => {
+      const res = await store.insertBookmark(JSON.parse(JSON.stringify(newBookmark.value)))
       card.value = false
+
+      if (res.result) {
+        quasar.notify({
+          message: 'Add completed',
+          type: 'positive',
+          textColor: 'dark',
+          position: 'bottom-right',
+          progress: true,
+          timeout: 2500,
+        })
+      } else {
+        quasar.notify({
+          message: 'Add failed',
+          type: 'negative',
+          textColor: 'dark',
+          position: 'bottom-right',
+          progress: true,
+          timeout: 2500,
+        })
+      }
     }
 
     const deleteBookmark = (id) => {
       quasar.dialog({
-        title: 'Delete',
-        message: 'Would you like to turn on the wifi?',
+        title: '<div class="text-orange">Delete Bookmark</div>',
+        message: 'Are you sure you want to delete this bookmark?',
         cancel: true,
-        persistent: true
+        persistent: true,
+        noShake: true,
+        html: true,
       }).onOk(async () => {
-        await store.deleteBookmark(id)
+        const res = await store.deleteBookmark(id)
+
+        if (res.result) {
+          quasar.notify({
+            message: 'Delete completed',
+            type: 'positive',
+            textColor: 'dark',
+            position: 'bottom-right',
+            progress: true,
+            timeout: 2500,
+          })
+        } else {
+          quasar.notify({
+            message: 'Delete failed',
+            type: 'negative',
+            textColor: 'dark',
+            position: 'bottom-right',
+            progress: true,
+            timeout: 2500,
+          })
+        }
       })
     }
 
@@ -297,9 +426,15 @@ export default defineComponent({
         await store.fetchBookmarks()
       },
       handleBackBtnClicked,
+      errorName,
+      errorMessageName,
+      nameValidation,
+      errorUrl,
+      errorMessageUrl,
+      urlValidation,
       editingName,
       editingUrl,
-      saveBookmark,
+      addBookmark,
       deleteBookmark,
       onShow,
       onHide,

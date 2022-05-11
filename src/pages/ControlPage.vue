@@ -1,114 +1,113 @@
 <template>
-<q-layout view="lHh Lpr lFf">
-  <q-header>
-    <q-bar
-      id="bar"
-      class="q-electron-drag text-white"
-    >
-      <div>
-        <q-icon
-          name="dashboard"
-          size="24px"
-          class="q-mr-sm"
-          color="orange"
-        />Remote Control</div>
-      <q-space />
-      <q-btn
-        dense
-        flat
-        icon="close"
-        @click="closeChild"
-      />
-    </q-bar>
-  </q-header>
-  <q-page-container class="bg-dark">
-    <q-page>
-      <div class="row">
-        <div class="col q-pa-sm">
-          <swiper
-            :modules="modules"
-            :allowTouchMove="false"
-            :pagination="paginationOption"
-            :spaceBetween="50"
-            :autoHeight="true"
-            style="padding: 28px;"
-            @swiper="setSwiperRef"
-          >
-            <swiper-slide
-              v-for="carouselIdx in carouselCount"
-              :key="carouselIdx"
-            >
-              <div
-                v-for="rowIdx in rowCount"
-                :key="rowIdx"
-                class="q-mb-sm"
-              >
-                <q-btn-toggle
-                  v-model="toggle"
-                  class="q-gutter-x-xs"
-                  spread
-                  toggle-color="teal"
-                  color="orange"
-                  text-color="black"
-                  :options="options[carouselIdx > 1 ? (carouselIdx - 1) * rowCount + (rowIdx - 1) : (rowIdx - 1)]"
-                />
-              </div>
-            </swiper-slide>
-          </swiper>
-        </div>
-      </div>
-      <div class="q-pa-md q-gutter-sm">
-        <div class="row">
-          <div class="col-6 q-px-sm">
-            <q-btn
-              class="remote-btn"
-              icon="zoom_in"
-              label="zoom in"
-              color="orange"
-              text-color="grey-9"
-              :disable="toggle === ''"
-              @click="zoomIn"
-            />
-          </div>
-          <div class="col-6 q-px-sm">
-            <q-btn
-              class="remote-btn"
-              icon="replay"
-              label="url"
-              color="orange"
-              text-color="grey-9"
-              :disable="toggle === ''"
-              @click="controlSelectUrlOn"
-            />
-          </div>
-        </div>
-        <div class="row">
-          <div class="col q-px-sm">
-            <q-btn
-              class="remote-btn"
-              icon="zoom_out"
-              label="zoom out"
-              color="orange"
-              text-color="grey-9"
-              :disable="toggle === ''"
-              @click="zoomOut"
-            />
-          </div>
-          <div class="col q-px-sm"></div>
-        </div>
-      </div>
-      <q-footer class="bg-dark q-pa-md text-center">
+  <q-layout view="lHh Lpr lFf">
+    <q-header>
+      <q-bar
+        id="bar"
+        class="q-electron-drag text-white"
+      >
+        <div>
+          <q-spinner-radio
+            color="orange"
+            size="24px"
+            class="q-mr-md"
+          />Remote Control</div>
+        <q-space />
         <q-btn
-          icon="first_page"
-          label="go main"
-          color="orange"
-          text-color="grey-9"
-          @click="goMain"
+          dense
+          flat
+          icon="close"
+          @click="closeChild"
         />
-      </q-footer>
-    </q-page>
-  </q-page-container>
-</q-layout>
+      </q-bar>
+    </q-header>
+    <q-page-container class="bg-dark">
+      <q-page>
+        <div class="row">
+          <div class="col q-pa-sm">
+            <swiper
+              :modules="modules"
+              :allowTouchMove="false"
+              :pagination="paginationOption"
+              :spaceBetween="50"
+              :autoHeight="true"
+              style="padding: 28px;"
+              @swiper="setSwiperRef"
+            >
+              <swiper-slide
+                v-for="slideIdx in slideCount"
+                :key="slideIdx"
+              >
+                <div
+                  v-for="rowIdx in rowCount"
+                  :key="rowIdx"
+                  class="q-mb-sm"
+                >
+                  <q-btn-toggle
+                    v-model="toggle"
+                    class="q-gutter-x-xs"
+                    spread
+                    toggle-color="teal"
+                    color="orange"
+                    text-color="black"
+                    :options="options[slideIdx > 1 ? (slideIdx - 1) * rowCount + (rowIdx - 1) : (rowIdx - 1)]"
+                  />
+                </div>
+              </swiper-slide>
+            </swiper>
+          </div>
+        </div>
+        <div class="q-pa-md q-gutter-sm">
+          <div class="row">
+            <div class="col-6 q-px-sm">
+              <q-btn
+                class="remote-btn"
+                icon="zoom_in"
+                label="zoom in"
+                color="orange"
+                text-color="grey-9"
+                :disable="toggle === ''"
+                @click="zoomIn"
+              />
+            </div>
+            <div class="col-6 q-px-sm">
+              <q-btn
+                class="remote-btn"
+                icon="replay"
+                label="url"
+                color="orange"
+                text-color="grey-9"
+                :disable="toggle === ''"
+                @click="controlSelectUrlOn"
+              />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col q-px-sm">
+              <q-btn
+                class="remote-btn"
+                icon="zoom_out"
+                label="zoom out"
+                color="orange"
+                text-color="grey-9"
+                :disable="toggle === ''"
+                @click="zoomOut"
+              />
+            </div>
+            <div class="col q-px-sm"></div>
+          </div>
+        </div>
+        <q-footer class="bg-dark q-pa-md text-center">
+          <q-btn
+            icon="first_page"
+            label="Main"
+            color="orange"
+            text-color="grey-9"
+            @click="goMain"
+          />
+        </q-footer>
+      </q-page>
+    </q-page-container>
+  </q-layout>
 </template>
 
 <script>
@@ -129,8 +128,8 @@ export default defineComponent({
   setup () {
     const $store = useMonitoringStore()
 
-    const carouselCount = ref(0)
-    const carouselInterval = ref(0)
+    const slideCount = ref(0)
+    const slideInterval = ref(0)
     const rowCount = ref(0)
     const colCount = ref(0)
     const options = ref([])
@@ -166,8 +165,8 @@ export default defineComponent({
       paginationOption,
       toggle,
       modules: [Autoplay, Pagination, Navigation],
-      carouselCount,
-      carouselInterval,
+      slideCount,
+      slideInterval,
       rowCount,
       colCount,
       controlEditModeOn () {
@@ -193,14 +192,14 @@ export default defineComponent({
     }
   },
   async created () {
-    const { carouselCount, carouselInterval, rowCount, colCount } = await window.myWindowAPI.getMonitoringProps()
+    const { slideCount, slideInterval, rowCount, colCount } = await window.myWindowAPI.getMonitoringProps()
 
-    this.carouselCount = carouselCount
-    this.carouselInterval = carouselInterval
+    this.slideCount = slideCount
+    this.slideInterval = slideInterval
     this.rowCount = rowCount
     this.colCount = colCount
 
-    for (let i = 1; i <= carouselCount; i++) {
+    for (let i = 1; i <= slideCount; i++) {
       let browserCnt = 1
 
       for (let j = 1; j <= rowCount; j++) {
@@ -210,7 +209,7 @@ export default defineComponent({
           option.push({
             label: browserCnt, value: `${i}-${j}-${x}`
           })
-          
+
           browserCnt++
         }
 

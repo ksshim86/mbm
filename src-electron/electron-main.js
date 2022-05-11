@@ -267,3 +267,68 @@ ipcMain.handle('deleteBookmark', async (event, args) => {
 
   return obj
 })
+
+ipcMain.handle('selectFavorites', async () => {
+  const obj = {
+    result: true,
+    message: '',
+    rows: {},
+  }
+  const sql = `
+    SELECT
+      id,
+      name,
+      slide_count AS slideCount,
+      row_count AS rowCount,
+      col_count AS colCount,
+      slide_interval AS slideInterval
+    FROM
+      favorite
+    WHERE
+      del_yn = 'N'`
+
+  try {
+    const res = await sqliteDao.all(sql)
+    obj.rows = res.rows
+  } catch (error) {
+    obj.result = false
+    obj.message = error.message
+  }
+
+  return obj
+})
+ipcMain.handle('selectFavoriteUrls', async (event, args) => {
+  const obj = {
+    result: true,
+    message: '',
+    rows: {},
+  }
+  const sql = `
+    SELECT
+      a.idx,
+      CASE WHEN
+        a.tab == 'bookmark'
+      THEN
+        (SELECT b.url FROM bookmark b WHERE b.id = a.bookmark_id)
+      ELSE
+        a.url
+      END AS url
+    FROM
+      favorite_url a
+    WHERE
+      a.favorite_id = 1
+    AND
+      a.del_yn = 'N'
+    ORDER BY
+      a.idx`
+
+  try {
+    const res = await sqliteDao.all(sql)
+    obj.rows = res.rows
+  } catch (error) {
+    obj.result = false
+    obj.message = error.message
+  }
+
+  return obj
+})

@@ -5,10 +5,10 @@
       </div>
       <div class="col-8 preview-col">
         <preview-mbm
-          :carousel-count=carouselCount
+          :slide-count=slideCount
           :row-count=rowCount
           :col-count=colCount
-          :carousel-interval="carouselInterval"
+          :slide-interval="slideInterval"
         />
       </div>
       <div class="col-2">
@@ -19,10 +19,10 @@
       </div>
       <div class="col-8">
         <q-badge color="secondary">
-          Slide Count: {{ carouselCount }}
+          Slide Count: {{ slideCount }}
         </q-badge>
         <q-slider
-          v-model="carouselCount"
+          v-model="slideCount"
           markers
           marker-labels
           :min="1"
@@ -31,10 +31,10 @@
         >
         </q-slider>
         <q-badge color="secondary">
-          Slide Interval: {{ carouselInterval }} sec
+          Slide Interval: {{ slideInterval }} sec
         </q-badge>
         <q-input
-          v-model.number="carouselInterval"
+          v-model.number="slideInterval"
           type="number"
           label-color="orange"
           dense
@@ -103,8 +103,8 @@ export default defineComponent({
   beforeRouteEnter (to, from, next) {
     next(vm => {
       if (from.name === 'monitoring') {
-        vm.carouselCount = Number(from.params.carouselCount)
-        vm.carouselInterval = Number(from.params.carouselInterval)
+        vm.slideCount = Number(from.params.slideCount)
+        vm.slideInterval = Number(from.params.slideInterval)
         vm.rowCount = Number(from.params.rowCount)
         vm.colCount = Number(from.params.colCount)
       }
@@ -112,8 +112,8 @@ export default defineComponent({
   },
   setup () {
     const router = useRouter()
-    const carouselCount = ref(1)
-    const carouselInterval = ref(30)
+    const slideCount = ref(1)
+    const slideInterval = ref(30)
     const rowCount = ref(1)
     const colCount = ref(1)
 
@@ -125,17 +125,19 @@ export default defineComponent({
       router.push({
         name: 'monitoring',
         params: {
-          carouselCount: carouselCount.value,
-          carouselInterval: carouselInterval.value,
+          isFavorite: false,
+          slideCount: slideCount.value,
+          slideInterval: slideInterval.value,
           rowCount: rowCount.value,
           colCount: colCount.value,
+          urls: [],
         }
       })
     }
 
     return {
-      carouselCount,
-      carouselInterval,
+      slideCount,
+      slideInterval,
       rowCount,
       colCount,
       handleBackBtnClicked,

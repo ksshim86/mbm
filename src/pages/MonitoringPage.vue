@@ -2,7 +2,7 @@
   <q-page>
     <swiper
       ref="swiper"
-      :navigation="!isDone && carouselCount > 1"
+      :navigation="!isDone && slideCount > 1"
       :modules="modules"
       :allowTouchMove="false"
       :autoplay="swiperAutoplay"
@@ -12,8 +12,8 @@
       @swiper="setSwiperRef"
     >
       <swiper-slide
-        v-for="carouselIdx in carouselCount"
-        :key="carouselIdx"
+        v-for="slideIdx in slideCount"
+        :key="slideIdx"
       >
         <div class="column fit">
           <div
@@ -29,10 +29,11 @@
               >
                 <div class="full-height custom-col">
                   <url-select
-                    :carouselIdx=carouselIdx
+                    :slideIdx=slideIdx
                     :rowIdx=rowIdx
                     :colIdx=colIdx
                     :bookmarks=bookmarks
+                    :url=url
                   />
                 </div>
               </div>
@@ -100,13 +101,23 @@ export default defineComponent({
     const router = useRouter()
     const route = useRoute()
 
-    const carouselCount = ref(Number(route.params.carouselCount))
-    const carouselInterval = ref(Number(route.params.carouselInterval))
+    const isFavorite = ref(route.params.isFavorite)
+    const slideCount = ref(Number(route.params.slideCount))
+    const slideInterval = ref(Number(route.params.slideInterval))
     const rowCount = ref(Number(route.params.rowCount))
     const colCount = ref(Number(route.params.colCount))
+    const urls = ref(route.params.urls)
+
+    try {
+      urls.value = JSON.parse(urls.value)
+    } catch (e) {
+      urls.value = []
+    }
+
+    debugger
 
     const bookmarks = ref([])
-
+    const url = ref('')
     const isDone = ref(false)
     watch(isDone, function (to, from) {
       store.setIsDone(to)
@@ -121,14 +132,14 @@ export default defineComponent({
     const handleDoneBtnClicked = () => {
       isDone.value = true
 
-      if (carouselCount.value > 1) {
+      if (slideCount.value > 1) {
         swiperRef.value.autoplay.start()
       }
 
       // 편집이 완료된 경우, 세팅된 값을 main으로 값을 전달한다
       window.myWindowAPI.sendMonitoringProps({
-        carouselCount: carouselCount.value,
-        carouselInterval: carouselInterval.value,
+        slideCount: slideCount.value,
+        slideInterval: slideInterval.value,
         rowCount: rowCount.value,
         colCount: colCount.value,
       })
@@ -138,13 +149,14 @@ export default defineComponent({
       modules: [Autoplay, Pagination, Navigation],
       setSwiperRef,
       swiperRef,
+      url,
       isDone,
       handlePrevBtnClicked () {
         router.push('/preview')
       },
       handleDoneBtnClicked,
-      carouselCount,
-      carouselInterval,
+      slideCount,
+      slideInterval,
       rowCount,
       colCount,
       slide: ref(1),
@@ -193,10 +205,7 @@ export default defineComponent({
       return `col-${colMaxClassNum / this.colCount}`
     },
     millisecond () {
-      return this.carouselInterval * 1000
-    },
-    carouselSlideClass () {
-      return this.isDone ? 'column full-height no-padding' : 'column full-height'
+      return this.slideInterval * 1000
     },
     isPagination () {
       const pagination = {
@@ -211,7 +220,7 @@ export default defineComponent({
       return this.isDone ? 'done-mode' : 'edit-mode'
     },
     swiperAutoplay () {
-      if (this.carouselCount > 1) {
+      if (this.slideCount > 1) {
         return { delay: this.millisecond, disableOnInteraction: false }
       } else {
         return false
@@ -233,10 +242,6 @@ export default defineComponent({
 
 .custom-col {
   border: 1px solid;
-}
-
-.custom-carousel {
-  background-color: aliceblue;
 }
 
 .custom-tab {
