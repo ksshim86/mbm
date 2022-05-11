@@ -20,23 +20,23 @@ export default defineComponent({
     const goMonitoring = async () => {
       const res = await window.myWindowAPI.selectFavoriteUrls(1)
       const item = favorites.value[0]
-      const urls = []
+      const urls = {}
 
       res.rows.forEach((row) => {
         urls[`idx${row.idx}`] = row.url
       })
-      console.log(urls)
-      // router.push({
-      //   name: 'monitoring',
-      //   params: {
-      //     isFavorite: true,
-      //     slideCount: item.slideCount,
-      //     slideInterval: item.slideInterval,
-      //     rowCount: item.rowCount,
-      //     colCount: item.colCount,
-      //     urls: JSON.stringify(res.rows),
-      //   }
-      // })
+
+      router.push({
+        name: 'monitoring',
+        params: {
+          isFavorite: true,
+          slideCount: item.slideCount,
+          slideInterval: item.slideInterval,
+          rowCount: item.rowCount,
+          colCount: item.colCount,
+          urls: JSON.stringify(urls),
+        }
+      })
     }
 
     return {

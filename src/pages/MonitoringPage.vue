@@ -33,7 +33,7 @@
                     :rowIdx=rowIdx
                     :colIdx=colIdx
                     :bookmarks=bookmarks
-                    :url=url
+                    :url="urls[`idx${slideIdx + 1}${rowIdx + 1}${colIdx + 1}`]"
                   />
                 </div>
               </div>
@@ -111,10 +111,8 @@ export default defineComponent({
     try {
       urls.value = JSON.parse(urls.value)
     } catch (e) {
-      urls.value = []
+      urls.value = {}
     }
-
-    debugger
 
     const bookmarks = ref([])
     const url = ref('')
