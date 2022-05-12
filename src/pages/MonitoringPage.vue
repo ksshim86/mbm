@@ -33,7 +33,7 @@
                     :rowIdx=rowIdx
                     :colIdx=colIdx
                     :bookmarks=bookmarks
-                    :url="urls[`idx${slideIdx + 1}${rowIdx + 1}${colIdx + 1}`]"
+                    :url="urls[`idx${slideIdx}${rowIdx}${colIdx}`]"
                   />
                 </div>
               </div>
@@ -115,7 +115,6 @@ export default defineComponent({
     }
 
     const bookmarks = ref([])
-    const url = ref('')
     const isDone = ref(false)
     watch(isDone, function (to, from) {
       store.setIsDone(to)
@@ -147,7 +146,7 @@ export default defineComponent({
       modules: [Autoplay, Pagination, Navigation],
       setSwiperRef,
       swiperRef,
-      url,
+      urls,
       isDone,
       handlePrevBtnClicked () {
         router.push('/preview')

@@ -97,14 +97,89 @@
           </div>
         </div>
         <q-footer class="bg-dark q-pa-md text-center">
-          <q-btn
-            icon="first_page"
-            label="Main"
-            color="orange"
-            text-color="grey-9"
-            @click="goMain"
-          />
+          <div class="row">
+            <div class="col-5 q-px-sm">
+              <q-btn
+                icon="first_page"
+                label="Main"
+                color="orange"
+                text-color="grey-9"
+                @click="goMain"
+              />
+            </div>
+            <div class="col-7 q-px-sm">
+              <q-btn
+                icon="favorite"
+                label="Add favorite"
+                color="orange"
+                text-color="grey-9"
+                @click="card = true"
+              />
+            </div>
+          </div>
         </q-footer>
+        <q-dialog
+          v-model="card"
+          persistent
+          no-shake
+          @show="onShow"
+          @hide="onHide"
+        >
+          <q-card style="width: 300px;">
+            <q-card-section>
+              <div class="row no-wrap items-center">
+                <div class="col text-h6 ellipsis text-orange">
+                  <q-icon
+                    name="favorite"
+                    class="q-mb-sm"
+                    size="32px"
+                    color="orange"
+                  />
+                  Add favorite
+                </div>
+              </div>
+            </q-card-section>
+            <q-form
+              @submit="addFavorite"
+              ref="newForm"
+            >
+              <q-card-section class="q-pt-none">
+                <div class="text-subtitle1">
+                  Name
+                </div>
+                <div class="q-pb-md">
+                  <q-input
+                    v-model="newFavorite.name"
+                    type="text"
+                    color="orange"
+                    dense
+                    :rules="[
+                      val => !!val || 'Name is required',
+                      val => val.length <= 10 || 'Please use maximum 10 characters'
+                    ]"
+                  />
+                </div>
+              </q-card-section>
+              <q-separator />
+              <q-card-actions align="right">
+                <q-btn
+                  v-close-popup
+                  flat
+                  color="orange"
+                  icon="close"
+                  label="Cancel"
+                />
+                <q-btn
+                  flat
+                  color="orange"
+                  icon="done"
+                  label="Save"
+                  type="submit"
+                />
+              </q-card-actions>
+            </q-form>
+          </q-card>
+        </q-dialog>
       </q-page>
     </q-page-container>
   </q-layout>
@@ -157,7 +232,15 @@ export default defineComponent({
       $store.setSlideIndex(slideIndex)
     }
 
+    const card = ref(false)
+    const showFavoriteDialog = () => {
+      newForm.value.focus()
+    }
+    const addFavorite = () => {
+    }
+
     return {
+      card,
       $store,
       swiperRef,
       setSwiperRef,
@@ -189,6 +272,8 @@ export default defineComponent({
       },
       closeChild,
       setSlideIndex,
+      showFavoriteDialog,
+      addFavorite,
     }
   },
   async created () {

@@ -24,7 +24,7 @@
           <q-btn
             class="full-width"
             color="orange"
-            text-color="black"
+            text-color="dark"
             label="Start"
             @click="handleStartBtnClicked"
           />
@@ -35,8 +35,9 @@
           <q-btn
             class="full-width"
             color="orange"
-            text-color="black"
+            text-color="dark"
             label="Favorite Monitoring"
+            icon="favorite"
             @click="handleFavoriteBtnClicked"
           />
         </div>
@@ -44,8 +45,9 @@
           <q-btn
             class="full-width"
             color="orange"
-            text-color="black"
+            text-color="dark"
             label="Bookmark"
+            icon="bookmark"
             @click="handleBookmarkBtnClicked"
           />
         </div>

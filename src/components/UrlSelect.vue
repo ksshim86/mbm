@@ -120,7 +120,7 @@ export default defineComponent({
     const options = ref(props.bookmarks)
 
     // 즐겨찾기로 호출된 경우
-    if (webViewUrl.value.length > 0) {
+    if (webViewUrl.value !== undefined && webViewUrl.value.length > 0) {
       isEdit.value = false
     }
 
