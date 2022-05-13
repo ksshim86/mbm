@@ -29,11 +29,13 @@
               >
                 <div class="full-height custom-col">
                   <url-select
+                    ref="urlSelectRefs"
+                    :isFavorite="isFavorite"
                     :slideIdx=slideIdx
                     :rowIdx=rowIdx
                     :colIdx=colIdx
                     :bookmarks=bookmarks
-                    :url="urls[`idx${slideIdx}${rowIdx}${colIdx}`]"
+                    :favoriteUrls="favoriteUrls[`idx${slideIdx}${rowIdx}${colIdx}`]"
                   />
                 </div>
               </div>
@@ -101,17 +103,17 @@ export default defineComponent({
     const router = useRouter()
     const route = useRoute()
 
-    const isFavorite = ref(route.params.isFavorite)
+    const isFavorite = ref(Boolean(route.params.isFavorite))
     const slideCount = ref(Number(route.params.slideCount))
     const slideInterval = ref(Number(route.params.slideInterval))
     const rowCount = ref(Number(route.params.rowCount))
     const colCount = ref(Number(route.params.colCount))
-    const urls = ref(route.params.urls)
+    const favoriteUrls = ref(route.params.favoriteUrls)
 
     try {
-      urls.value = JSON.parse(urls.value)
+      favoriteUrls.value = JSON.parse(favoriteUrls.value)
     } catch (e) {
-      urls.value = {}
+      favoriteUrls.value = {}
     }
 
     const bookmarks = ref([])
@@ -126,6 +128,7 @@ export default defineComponent({
       swiperRef.value = swiper
     }
 
+    const urlSelectRefs = ref([])
     const handleDoneBtnClicked = () => {
       isDone.value = true
 
@@ -133,12 +136,38 @@ export default defineComponent({
         swiperRef.value.autoplay.start()
       }
 
+      let urlSelectArr = []
+      let urlSelectObj = {
+        idx: null,
+        tab: '',
+        url: '',
+        bookmarkId: null,
+      }
+
+      urlSelectRefs.value.forEach((item) => {
+        urlSelectObj.idx = `${item.slideIdx}${item.rowIdx}${item.colIdx}`
+        urlSelectObj.tab = item.tab
+
+        if (item.webview !== null) {
+          if (item.tab === 'bookmark') {
+            urlSelectObj.bookmarkId = item.selectedBookmark.id
+          } else {
+            urlSelectObj.url = item.webViewUrl
+          }
+        }
+
+        urlSelectArr.push(urlSelectObj)
+      })
+
+      console.log(urlSelectArr)
+
       // 편집이 완료된 경우, 세팅된 값을 main으로 값을 전달한다
       window.myWindowAPI.sendMonitoringProps({
         slideCount: slideCount.value,
         slideInterval: slideInterval.value,
         rowCount: rowCount.value,
         colCount: colCount.value,
+        urlSelectObj: urlSelectObj,
       })
     }
 
@@ -146,7 +175,9 @@ export default defineComponent({
       modules: [Autoplay, Pagination, Navigation],
       setSwiperRef,
       swiperRef,
-      urls,
+      isFavorite,
+      favoriteUrls,
+      urlSelectRefs,
       isDone,
       handlePrevBtnClicked () {
         router.push('/preview')
@@ -164,6 +195,7 @@ export default defineComponent({
 
         store.bookmarks.forEach(row => {
           const obj = {}
+          obj.id = row.id
           obj.label = row.name
           obj.value = row.url
           bookmarks.value.push(obj)

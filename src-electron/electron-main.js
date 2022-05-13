@@ -303,24 +303,36 @@ ipcMain.handle('selectFavoriteUrls', async (event, args) => {
     message: '',
     rows: {},
   }
+  // const sql = `
+  //   SELECT
+  //     a.idx,
+  //     CASE WHEN
+  //       a.tab == 'bookmark'
+  //     THEN
+  //       (SELECT b.url FROM bookmark b WHERE b.id = a.bookmark_id)
+  //     ELSE
+  //       a.url
+  //     END AS url
+  //   FROM
+  //     favorite_url a
+  //   WHERE
+  //     a.favorite_id = 1
+  //   AND
+  //     a.del_yn = 'N'
+  //   ORDER BY
+  //     a.idx`
   const sql = `
     SELECT
-      a.idx,
-      CASE WHEN
-        a.tab == 'bookmark'
-      THEN
-        (SELECT b.url FROM bookmark b WHERE b.id = a.bookmark_id)
-      ELSE
-        a.url
-      END AS url
+      *
     FROM
-      favorite_url a
+      favorite_url
     WHERE
-      a.favorite_id = 1
+      favorite_id = 1
     AND
-      a.del_yn = 'N'
+      del_yn = 'N'
     ORDER BY
-      a.idx`
+      idx
+  `
 
   try {
     const res = await sqliteDao.all(sql)

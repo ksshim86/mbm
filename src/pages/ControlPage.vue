@@ -201,7 +201,7 @@ export default defineComponent({
     SwiperSlide,
   },
   setup () {
-    const $store = useMonitoringStore()
+    const store = useMonitoringStore()
 
     const slideCount = ref(0)
     const slideInterval = ref(0)
@@ -229,10 +229,13 @@ export default defineComponent({
 
     const setSlideIndex = (slideIndex) => {
       toggle.value = ''
-      $store.setSlideIndex(slideIndex)
+      store.setSlideIndex(slideIndex)
     }
 
     const card = ref(false)
+    const newFavorite = ref({
+      name: ''
+    })
     const showFavoriteDialog = () => {
       newForm.value.focus()
     }
@@ -241,7 +244,8 @@ export default defineComponent({
 
     return {
       card,
-      $store,
+      newFavorite,
+      store,
       swiperRef,
       setSwiperRef,
       options,
@@ -253,7 +257,7 @@ export default defineComponent({
       rowCount,
       colCount,
       controlEditModeOn () {
-        $store.setIsDone(false)
+        store.setIsDone(false)
         window.myWindowAPI.controlEditModeOn()
       },
       controlSelectUrlOn () {

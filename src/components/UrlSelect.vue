@@ -29,7 +29,7 @@
         >
           <q-select
             dense
-            v-model="model"
+            v-model="selectedBookmark"
             use-input
             hide-selected
             fill-input
@@ -100,28 +100,39 @@
 </template>
 
 <script>
-import { ref, defineComponent, onMounted } from 'vue'
+import { ref, defineComponent, onMounted, toRefs } from 'vue'
 
 export default defineComponent({
   name: 'UrlSelect',
   props: {
+    isFavorite: Boolean,
     slideIdx: Number,
     rowIdx: Number,
     colIdx: Number,
     bookmarks: Array,
-    url: String,
+    favoriteUrls: Object,
   },
   setup (props) {
     const tab = ref('bookmark')
-    const model = ref(null)
+    const selectedBookmark = ref(null)
     const urlInput = ref('')
-    const webViewUrl = ref(props.url)
+    const webViewUrl = ref('')
     const isEdit = ref(true)
     const options = ref(props.bookmarks)
-
+    const favoriteUrls = toRefs(props.favoriteUrls)
     // 즐겨찾기로 호출된 경우
-    if (webViewUrl.value !== undefined && webViewUrl.value.length > 0) {
-      isEdit.value = false
+    if (props.isFavorite) {
+      // isEdit.value = false
+      tab.value = favoriteUrls.tab.value
+
+      if (tab.value === 'bookmark') {
+        // 비동기로 monitoringpage에서 bookmark가 다 불러와질때 작업해야 한다.
+        // props.bookmark watch를 통해서 세팅해야 할 듯?
+        selectedBookmark.value = options.value.find((o) => o.value == favoriteUrls.bookmark_id
+        )
+      } else {
+        urlInput.value = favoriteUrls.url.value
+      }
     }
 
     const filterFn = function (val, update, abort) {
@@ -136,7 +147,7 @@ export default defineComponent({
       if (tab.value === 'input') {
         webViewUrl.value = urlInput.value
       } else {
-        webViewUrl.value = model.value.value
+        webViewUrl.value = selectedBookmark.value.value
       }
 
       isEdit.value = false
@@ -172,7 +183,7 @@ export default defineComponent({
       isEdit,
       urlInput,
       webViewUrl,
-      model,
+      selectedBookmark,
       tab,
       filterFn,
       handleUrlInputClicked,

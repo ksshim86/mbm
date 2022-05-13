@@ -20,10 +20,10 @@ export default defineComponent({
     const goMonitoring = async () => {
       const res = await window.myWindowAPI.selectFavoriteUrls(1)
       const item = favorites.value[0]
-      const urls = {}
+      const favoriteUrls = {}
 
       res.rows.forEach((row) => {
-        urls[`idx${row.idx}`] = row.url
+        favoriteUrls[`idx${row.idx}`] = row
       })
 
       router.push({
@@ -34,7 +34,7 @@ export default defineComponent({
           slideInterval: item.slideInterval,
           rowCount: item.rowCount,
           colCount: item.colCount,
-          urls: JSON.stringify(urls),
+          favoriteUrls: JSON.stringify(favoriteUrls),
         }
       })
     }
