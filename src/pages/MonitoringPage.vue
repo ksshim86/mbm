@@ -103,7 +103,7 @@ export default defineComponent({
     const router = useRouter()
     const route = useRoute()
 
-    const isFavorite = ref(Boolean(route.params.isFavorite))
+    const isFavorite = JSON.parse(route.params.isFavorite)
     const slideCount = ref(Number(route.params.slideCount))
     const slideInterval = ref(Number(route.params.slideInterval))
     const rowCount = ref(Number(route.params.rowCount))

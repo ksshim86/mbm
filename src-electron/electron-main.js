@@ -323,7 +323,11 @@ ipcMain.handle('selectFavoriteUrls', async (event, args) => {
   //     a.idx`
   const sql = `
     SELECT
-      *
+      favorite_id AS favoriteId,
+      idx,
+      tab,
+      url,
+      bookmark_id AS bookmarkId
     FROM
       favorite_url
     WHERE
