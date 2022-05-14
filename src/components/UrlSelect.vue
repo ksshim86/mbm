@@ -100,7 +100,7 @@
 </template>
 
 <script>
-import { ref, defineComponent, onMounted, toRefs } from 'vue'
+import { ref, defineComponent, onMounted, toRefs, watch } from 'vue'
 
 export default defineComponent({
   name: 'UrlSelect',
@@ -120,20 +120,26 @@ export default defineComponent({
     const isEdit = ref(true)
     const options = ref(props.bookmarks)
     const favoriteUrls = toRefs(props.favoriteUrls)
-    // 즐겨찾기로 호출된 경우
-    if (props.isFavorite) {
-      // isEdit.value = false
-      tab.value = favoriteUrls.tab.value
 
-      if (tab.value === 'bookmark') {
-        // 비동기로 monitoringpage에서 bookmark가 다 불러와질때 작업해야 한다.
-        // props.bookmark watch를 통해서 세팅해야 할 듯?
-        selectedBookmark.value = options.value.find((o) => o.value == favoriteUrls.bookmark_id
-        )
-      } else {
-        urlInput.value = favoriteUrls.url.value
-      }
-    }
+    watch(props.bookmarks, (to) => {
+      console.log(to)
+    }, { deep: true })
+
+
+    // // 즐겨찾기로 호출된 경우
+    // if (props.isFavorite) {
+    //   // isEdit.value = false
+    //   tab.value = favoriteUrls.tab.value
+
+    //   if (tab.value === 'bookmark') {
+    //     // 비동기로 monitoringpage에서 bookmark가 다 불러와질때 작업해야 한다.
+    //     // props.bookmark watch를 통해서 세팅해야 할 듯?
+    //     selectedBookmark.value = { id: 1, label: 'google', value: 'https://google.com' }
+    //     // options.value.find((o) => o.value == favoriteUrls.bookmark_id)
+    //   } else {
+    //     urlInput.value = favoriteUrls.url.value
+    //   }
+    // }
 
     const filterFn = function (val, update, abort) {
       const bookmarks = props.bookmarks
