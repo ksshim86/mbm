@@ -187,6 +187,7 @@
 
 <script>
 import { defineComponent, ref } from 'vue'
+import { useQuasar } from 'quasar'
 import { useMonitoringStore } from 'stores/monitoring'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/css'
@@ -202,11 +203,13 @@ export default defineComponent({
   },
   setup () {
     const store = useMonitoringStore()
+    const quasar = useQuasar()
 
     const slideCount = ref(0)
     const slideInterval = ref(0)
     const rowCount = ref(0)
     const colCount = ref(0)
+    const favoriteUrl = ref(null)
     const options = ref([])
     const paginationOption = ref({
       clickable: true,
@@ -239,10 +242,41 @@ export default defineComponent({
     const showFavoriteDialog = () => {
       newForm.value.focus()
     }
-    const addFavorite = () => {
+    const addFavorite = async () => {
+      const res = await window.myWindowAPI.insertFavorite(JSON.parse(JSON.stringify({
+        name: newFavorite.value.name,
+        slideCount: slideCount.value,
+        slideInterval: slideInterval.value,
+        rowCount: rowCount.value,
+        colCount: colCount.value,
+        favoriteUrl: favoriteUrl.value,
+      })))
+
+      card.value = false
+
+      if (res.result) {
+        quasar.notify({
+          message: 'Add completed',
+          type: 'positive',
+          textColor: 'dark',
+          position: 'bottom-right',
+          progress: true,
+          timeout: 2500,
+        })
+      } else {
+        quasar.notify({
+          message: 'Add failed',
+          type: 'negative',
+          textColor: 'dark',
+          position: 'bottom-right',
+          progress: true,
+          timeout: 2500,
+        })
+      }
     }
 
     return {
+      quasar,
       card,
       newFavorite,
       store,
@@ -256,6 +290,7 @@ export default defineComponent({
       slideInterval,
       rowCount,
       colCount,
+      favoriteUrl,
       controlEditModeOn () {
         store.setIsDone(false)
         window.myWindowAPI.controlEditModeOn()
@@ -281,12 +316,13 @@ export default defineComponent({
     }
   },
   async created () {
-    const { slideCount, slideInterval, rowCount, colCount } = await window.myWindowAPI.getMonitoringProps()
+    const { slideCount, slideInterval, rowCount, colCount, favoriteUrl } = await window.myWindowAPI.getMonitoringProps()
 
     this.slideCount = slideCount
     this.slideInterval = slideInterval
     this.rowCount = rowCount
     this.colCount = colCount
+    this.favoriteUrl = favoriteUrl
 
     for (let i = 1; i <= slideCount; i++) {
       let browserCnt = 1

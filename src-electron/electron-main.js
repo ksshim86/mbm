@@ -92,9 +92,9 @@ function createChildWindow () {
     parent: mainWindow,
     show: false,
     width: 350,
-    height: 500,
+    height: 535,
     minWidth: 350,
-    minHeight: 500,
+    minHeight: 535,
     maxWidth: 350,
     useContentSize: true,
     frame: false,
@@ -135,6 +135,7 @@ let monitoringProps = {}
 
 ipcMain.handle('sendMonitoringProps', (event, args) => {
   monitoringProps = JSON.parse(JSON.stringify(args))
+  console.log(monitoringProps)
 })
 
 ipcMain.handle('toggleControl', (event, args) => {
@@ -303,24 +304,7 @@ ipcMain.handle('selectFavoriteUrls', async (event, args) => {
     message: '',
     rows: {},
   }
-  // const sql = `
-  //   SELECT
-  //     a.idx,
-  //     CASE WHEN
-  //       a.tab == 'bookmark'
-  //     THEN
-  //       (SELECT b.url FROM bookmark b WHERE b.id = a.bookmark_id)
-  //     ELSE
-  //       a.url
-  //     END AS url
-  //   FROM
-  //     favorite_url a
-  //   WHERE
-  //     a.favorite_id = 1
-  //   AND
-  //     a.del_yn = 'N'
-  //   ORDER BY
-  //     a.idx`
+
   const sql = `
     SELECT
       favorite_id AS favoriteId,
@@ -341,6 +325,47 @@ ipcMain.handle('selectFavoriteUrls', async (event, args) => {
   try {
     const res = await sqliteDao.all(sql)
     obj.rows = res.rows
+  } catch (error) {
+    obj.result = false
+    obj.message = error.message
+  }
+
+  return obj
+})
+
+
+ipcMain.handle('insertFavorite', async (event, args) => {
+  const obj = {
+    result: true,
+    message: '',
+    rows: {},
+  }
+  const favoriteSql = `
+    INSERT INTO
+      favorite (name, slide_count, row_count, col_count, slide_interval)
+    VALUES
+      (?, ?, ?, ?, ?)`
+  const favoriteUrlSql = `
+      INSERT INTO
+        favorite_url (favorite_id, idx, tab, url, bookmark_id)
+      VALUES
+        (?, ?, ?, ?, ?)`
+
+  try {
+    const favorite = JSON.parse(JSON.stringify(args))
+    const params = [favorite.name, favorite.slideCount, favorite.rowCount, favorite.colCount, favorite.slideInterval]
+
+    await sqliteDao.run(favoriteSql, params)
+    let res = await sqliteDao.get(`select seq from sqlite_sequence where name = 'favorite'`)
+    const favoriteId = res.row.seq
+
+    favorite.favoriteUrl.forEach(async (item) => {
+      const params = [favoriteId, item.idx, item.tab, item.url, item.bookmarkId]
+
+      res = await sqliteDao.run(favoriteUrlSql, params)
+    })
+
+    obj.result = res.result
   } catch (error) {
     obj.result = false
     obj.message = error.message

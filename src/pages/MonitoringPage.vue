@@ -137,14 +137,14 @@ export default defineComponent({
       }
 
       let urlSelectArr = []
-      let urlSelectObj = {
-        idx: null,
-        tab: '',
-        url: '',
-        bookmarkId: null,
-      }
-
       urlSelectRefs.value.forEach((item) => {
+        let urlSelectObj = {
+          idx: null,
+          tab: '',
+          url: '',
+          bookmarkId: null,
+        }
+
         urlSelectObj.idx = `${item.slideIdx}${item.rowIdx}${item.colIdx}`
         urlSelectObj.tab = item.tab
 
@@ -159,15 +159,13 @@ export default defineComponent({
         urlSelectArr.push(urlSelectObj)
       })
 
-      console.log(urlSelectArr)
-
       // 편집이 완료된 경우, 세팅된 값을 main으로 값을 전달한다
       window.myWindowAPI.sendMonitoringProps({
         slideCount: slideCount.value,
         slideInterval: slideInterval.value,
         rowCount: rowCount.value,
         colCount: colCount.value,
-        urlSelectObj: urlSelectObj,
+        favoriteUrl: urlSelectArr,
       })
     }
 
@@ -180,7 +178,11 @@ export default defineComponent({
       urlSelectRefs,
       isDone,
       handlePrevBtnClicked () {
-        router.push('/preview')
+        if (isFavorite) {
+          router.push('/favorite')
+        } else {
+          router.push('/preview')
+        }
       },
       handleDoneBtnClicked,
       slideCount,
