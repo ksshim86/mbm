@@ -36,7 +36,7 @@
             class="full-width"
             color="orange"
             text-color="dark"
-            label="Favorite Monitoring"
+            label="Monitoring Favorites"
             icon="favorite"
             @click="handleFavoriteBtnClicked"
           />
@@ -46,7 +46,7 @@
             class="full-width"
             color="orange"
             text-color="dark"
-            label="Bookmark"
+            label="Bookmarks"
             icon="bookmark"
             @click="handleBookmarkBtnClicked"
           />

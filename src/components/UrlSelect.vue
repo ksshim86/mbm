@@ -39,6 +39,7 @@
             @filter="filterFn"
             hint="Text autocomplete"
             class="custom-input"
+            @keyup.enter="handleUrlInputClicked"
           >
             <template v-slot:no-option>
               <q-item>
@@ -70,6 +71,7 @@
             dense
             hint="input url"
             class="custom-input q-pb-md"
+            @keyup.enter="handleUrlInputClicked"
           >
             <template v-slot:after>
               <q-btn
@@ -130,7 +132,7 @@ export default defineComponent({
         } else {
           urlInput.value = favoriteUrls.value.url
         }
-        
+
         handleUrlInputClicked()
       }
     }, { deep: true })
@@ -147,7 +149,9 @@ export default defineComponent({
       if (tab.value === 'input') {
         webViewUrl.value = urlInput.value
       } else {
-        webViewUrl.value = selectedBookmark.value.value
+        if (selectedBookmark.value !== undefined) {
+          webViewUrl.value = selectedBookmark.value.value
+        }
       }
 
       isEdit.value = false

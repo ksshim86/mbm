@@ -1,6 +1,11 @@
 <template>
   <q-page>
     <div class="fixed-center">
+      <q-toolbar class="text-orange">
+        <q-toolbar-title>
+          Bookmarks
+        </q-toolbar-title>
+      </q-toolbar>
       <div class="row text-center">
         <q-table
           title="Bookmarks"
@@ -18,7 +23,7 @@
         >
           <template v-slot:top>
             <q-btn
-              outline
+              flat
               icon="bookmark_add"
               color="orange"
               text-color="orange"
@@ -121,7 +126,7 @@
                   size="sm"
                   color="orange"
                   round
-                  outline
+                  flat
                   @click="deleteBookmark(props.row.id)"
                   icon="delete"
                 >

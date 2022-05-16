@@ -86,6 +86,12 @@ contextBridge.exposeInMainWorld('myWindowAPI', {
   async insertFavorite (favorite) {
     return await ipcRenderer.invoke('insertFavorite', favorite)
   },
+  async updateFavorite (favorite) {
+    return await ipcRenderer.invoke('updateFavorite', favorite)
+  },
+  async deleteFavorite (id) {
+    return await ipcRenderer.invoke('deleteFavorite', id)
+  },
 
   receive: (channel, func) => {
     let validChannels = ['back', 'controlEditModeOn', 'controlSelectUrlOn',

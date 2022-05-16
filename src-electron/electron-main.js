@@ -311,19 +311,40 @@ ipcMain.handle('selectFavoriteUrls', async (event, args) => {
       idx,
       tab,
       url,
-      bookmark_id AS bookmarkId
-    FROM
-      favorite_url
-    WHERE
-      favorite_id = 1
-    AND
-      del_yn = 'N'
-    ORDER BY
-      idx
+      CASE WHEN
+        bookmark_id is not null AND (SELECT b.del_yn FROM bookmark b WHERE b.id = a.bookmark_id) == 'N'
+      THEN
+        bookmark_id
+      ELSE
+        NULL
+      END AS bookmarkId,
+      CASE WHEN
+        bookmark_id is not null
+      THEN
+        (SELECT b.name FROM bookmark b WHERE b.id = a.bookmark_id AND b.del_yn = 'N')
+      ELSE
+        ''
+      END AS bookmarkNm,
+      CASE WHEN
+        bookmark_id is not null
+      THEN
+        (SELECT b.url FROM bookmark b WHERE b.id = a.bookmark_id AND b.del_yn = 'N')
+      ELSE
+        null
+      END AS bookmarkUrl
+      FROM
+        favorite_url a
+      WHERE
+        favorite_id = ?
+      AND
+        del_yn = 'N'
+      ORDER BY
+        a.idx
   `
+  const params = [args]
 
   try {
-    const res = await sqliteDao.all(sql)
+    const res = await sqliteDao.all(sql, params)
     obj.rows = res.rows
   } catch (error) {
     obj.result = false
@@ -364,6 +385,51 @@ ipcMain.handle('insertFavorite', async (event, args) => {
 
       res = await sqliteDao.run(favoriteUrlSql, params)
     })
+
+    obj.result = res.result
+  } catch (error) {
+    obj.result = false
+    obj.message = error.message
+  }
+
+  return obj
+})
+
+ipcMain.handle('updateFavorite', async (event, args) => {
+  const obj = {
+    result: true,
+    message: '',
+    rows: {},
+  }
+  const sql = `UPDATE favorite SET name = ? WHERE id = ?`
+
+  try {
+    const favorite = JSON.parse(JSON.stringify(args))
+    const params = [favorite.name, favorite.id]
+
+    const res = await sqliteDao.run(sql, params)
+
+    obj.result = res.result
+  } catch (error) {
+    obj.result = false
+    obj.message = error.message
+  }
+
+  return obj
+})
+
+ipcMain.handle('deleteFavorite', async (event, args) => {
+  const obj = {
+    result: true,
+    message: '',
+    rows: {},
+  }
+  const sql = `UPDATE favorite SET DEL_YN = 'Y' WHERE id = ?`
+
+  try {
+    const params = [args]
+
+    const res = await sqliteDao.run(sql, params)
 
     obj.result = res.result
   } catch (error) {
