@@ -2,8 +2,15 @@ import sqlite from 'sqlite3'
 import path from 'path'
 
 class Dao {
-  constructor () {
-    const dbFilePath = path.resolve('./db/', 'mbm.db')
+  constructor() {
+    let dbName = ''
+    if (process.env.DEBUGGING) {
+      dbName = 'mbm-test.db'
+    } else {
+      dbName = 'mbm.db'
+    }
+
+    const dbFilePath = path.resolve('./db/', dbName)
     this.db = new sqlite.Database(
       dbFilePath, sqlite.OPEN_READWRITE || sqlite.OPEN_CREATE, async (err) => {
         if (err) {

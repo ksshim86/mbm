@@ -223,7 +223,7 @@ module.exports = configure(function (ctx) {
 
         appId: 'mbm',
         extraFiles: [
-          './db/**'
+          './db/mbm.db'
         ]
       },
 
