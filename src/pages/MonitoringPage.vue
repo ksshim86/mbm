@@ -150,7 +150,9 @@ export default defineComponent({
 
         if (item.webview !== null) {
           if (item.tab === 'bookmark') {
-            urlSelectObj.bookmarkId = item.selectedBookmark.id
+            if (item.selectedBookmark !== undefined) {
+              urlSelectObj.bookmarkId = item.selectedBookmark.id
+            }
           } else {
             urlSelectObj.url = item.webViewUrl
           }
