@@ -94,7 +94,7 @@
       :id="`webview${rowIdx}-${colIdx}`"
       :src="webViewUrl"
       allowpopups
-      webPreferences="nativeWindowOpen"
+      webPreferences="nativeWindowOpen=yes"
       :partition="`partition${rowIdx}-${colIdx}`"
     >
     </webview>
