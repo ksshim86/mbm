@@ -155,7 +155,7 @@
                     dense
                     :rules="[
                       val => !!val || 'Name is required',
-                      val => val.length <= 10 || 'Please use maximum 10 characters'
+                      val => val.length <= 20 || 'Please use maximum 20 characters'
                     ]"
                   />
                 </div>

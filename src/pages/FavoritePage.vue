@@ -69,7 +69,7 @@
                   title="Update name"
                   buttons
                   color="orange"
-                  style="width: 250px;"
+                  style="width: 330px;"
                   :validate="nameValidation"
                   @hide="nameValidation"
                   @save="editingName(props)"
@@ -292,9 +292,9 @@ export default defineComponent({
         errorName.value = true
         errorMessageName.value = 'Name is required'
         return false
-      } else if (val.length > 10) {
+      } else if (val.length > 20) {
         errorName.value = true
-        errorMessageName.value = 'Please use maximum 10 characters'
+        errorMessageName.value = 'Please use maximum 20 characters'
         return false
       }
 
