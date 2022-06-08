@@ -53,6 +53,15 @@
         </div>
       </div>
     </div>
+    <q-footer class="bg-dark q-pa-md text-right">
+      <q-btn
+        flat
+        no-caps
+        label="https://github.com/ksshim86/mbm"
+        icon="img:icons/GitHub-Mark-Light-64px.png"
+        @click="handleGithubBtnClicked"
+      />
+    </q-footer>
   </q-page>
 </template>
 
@@ -77,10 +86,15 @@ export default defineComponent({
       router.push('/favorite')
     }
 
+    const handleGithubBtnClicked = () => {
+      window.myWindowAPI.newWindow('https://github.com/ksshim86/mbm')
+    }
+
     return {
       handleStartBtnClicked,
       handleBookmarkBtnClicked,
       handleFavoriteBtnClicked,
+      handleGithubBtnClicked,
     }
   }
 })

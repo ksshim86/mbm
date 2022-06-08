@@ -65,6 +65,9 @@ contextBridge.exposeInMainWorld('myWindowAPI', {
   commandGoMain () {
     ipcRenderer.invoke('commandGoMain')
   },
+  newWindow (args) {
+    ipcRenderer.invoke('newWindow', args)
+  },
   async selectBookmarks () {
     return await ipcRenderer.invoke('selectBookmarks')
   },

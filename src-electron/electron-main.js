@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, nativeTheme } from 'electron'
+import { app, BrowserWindow, ipcMain, nativeTheme, shell } from 'electron'
 import { initialize, enable } from '@electron/remote/main'
 import path from 'path'
 import os from 'os'
@@ -125,6 +125,10 @@ function createChildWindow () {
     })
   }
 }
+
+ipcMain.handle('newWindow', (event, args) => {
+  shell.openExternal(args)
+})
 
 ipcMain.handle('closeChild', () => {
   childWindow.close()
