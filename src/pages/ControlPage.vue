@@ -243,36 +243,36 @@ export default defineComponent({
       newForm.value.focus()
     }
     const addFavorite = async () => {
-      const res = await window.myWindowAPI.insertFavorite(JSON.parse(JSON.stringify({
-        name: newFavorite.value.name,
-        slideCount: slideCount.value,
-        slideInterval: slideInterval.value,
-        rowCount: rowCount.value,
-        colCount: colCount.value,
-        favoriteUrl: favoriteUrl.value,
-      })))
+      // const res = await window.myWindowAPI.insertFavorite(JSON.parse(JSON.stringify({
+      //   name: newFavorite.value.name,
+      //   slideCount: slideCount.value,
+      //   slideInterval: slideInterval.value,
+      //   rowCount: rowCount.value,
+      //   colCount: colCount.value,
+      //   favoriteUrl: favoriteUrl.value,
+      // })))
 
-      card.value = false
+      // card.value = false
 
-      if (res.result) {
-        quasar.notify({
-          message: 'Add completed',
-          type: 'positive',
-          textColor: 'dark',
-          position: 'bottom-right',
-          progress: true,
-          timeout: 2500,
-        })
-      } else {
-        quasar.notify({
-          message: 'Add failed',
-          type: 'negative',
-          textColor: 'dark',
-          position: 'bottom-right',
-          progress: true,
-          timeout: 2500,
-        })
-      }
+      // if (res.result) {
+      //   quasar.notify({
+      //     message: 'Add completed',
+      //     type: 'positive',
+      //     textColor: 'dark',
+      //     position: 'bottom-right',
+      //     progress: true,
+      //     timeout: 2500,
+      //   })
+      // } else {
+      //   quasar.notify({
+      //     message: 'Add failed',
+      //     type: 'negative',
+      //     textColor: 'dark',
+      //     position: 'bottom-right',
+      //     progress: true,
+      //     timeout: 2500,
+      //   })
+      // }
     }
 
     return {

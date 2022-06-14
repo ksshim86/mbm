@@ -88,6 +88,8 @@ export default defineComponent({
     const store = useMonitoringStore()
     const { toggleControl } = storeToRefs(store)
 
+    window.myWindowAPI.initFavoriteUrls()
+
     watch(toggleControl, (to) => {
       if (to && swiperRef.value.autoplay !== undefined) {
         swiperRef.value.autoplay.stop()
@@ -97,8 +99,7 @@ export default defineComponent({
       if (!to && swiperRef.value.autoplay !== undefined) {
         swiperRef.value.autoplay.start()
       }
-    },
-    )
+    })
 
     const router = useRouter()
     const route = useRoute()

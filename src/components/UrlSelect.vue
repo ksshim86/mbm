@@ -146,15 +146,17 @@ export default defineComponent({
     }
 
     const handleUrlInputClicked = () => {
-      if (tab.value === 'input') {
-        webViewUrl.value = urlInput.value
-      } else {
-        if (selectedBookmark.value !== undefined) {
-          webViewUrl.value = selectedBookmark.value.value
+      if (urlInput.value.length > 0 || selectedBookmark.value !== undefined) {
+        if (tab.value === 'input') {
+          webViewUrl.value = urlInput.value
+        } else {
+          if (selectedBookmark.value !== undefined) {
+            webViewUrl.value = selectedBookmark.value.value
+          }
         }
-      }
 
-      isEdit.value = false
+        isEdit.value = false
+      }
     }
 
     const webview = ref(null)
@@ -179,6 +181,53 @@ export default defineComponent({
       window.myWindowAPI.receive(`controlSelectUrlOn-${idx}`, selectUrlOnFunc)
       window.myWindowAPI.receive(`zoomIn-${idx}`, zoomInFunc)
       window.myWindowAPI.receive(`zoomOut-${idx}`, zoomOutFunc)
+    })
+
+    let tempIdx = Number(`${props.slideIdx}${props.rowIdx}${props.colIdx}`)
+    let tempTab = tab.value
+    let tempUrl = ''
+    let tempBookmarkId = null
+
+    if (props.isFavorite) {
+      tempIdx = favoriteUrls.value.idx
+      tempTab = favoriteUrls.value.tab
+      tempUrl = favoriteUrls.value.url
+      tempBookmarkId = favoriteUrls.value.bookmarkId
+    }
+
+    window.myWindowAPI.setFavoriteUrl(
+      {
+        idx: tempIdx,
+        tab: tempTab,
+        url: tempUrl,
+        bookmarkId: tempBookmarkId,
+      }
+    )
+
+    /**
+     * webview에 바인딩에 되는 url이 변경되면
+     * 해당 정보를 main에 넘긴다
+     */
+    watch(webViewUrl, (to) => {
+      let idx = Number(`${props.slideIdx}${props.rowIdx}${props.colIdx}`)
+      let bookmarkId = null
+
+      if (tab.value === 'bookmark') {
+        bookmarkId = selectedBookmark.value.id
+      }
+
+      if (props.isFavorite) {
+        idx = favoriteUrls.value.idx
+      }
+
+      window.myWindowAPI.setFavoriteUrl(
+        {
+          idx: idx,
+          tab: tab.value,
+          url: urlInput.value,
+          bookmarkId: bookmarkId,
+        }
+      )
     })
 
     return {

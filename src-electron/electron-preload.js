@@ -38,6 +38,12 @@ contextBridge.exposeInMainWorld('myWindowAPI', {
   sendMonitoringProps (args) {
     ipcRenderer.invoke('sendMonitoringProps', args)
   },
+  initFavoriteUrls () {
+    ipcRenderer.invoke('initFavoriteUrls')
+  },
+  setFavoriteUrl (args) {
+    ipcRenderer.invoke('setFavoriteUrl', args)
+  },
   getMonitoringProps () {
     return ipcRenderer.invoke('getMonitoringProps')
   },

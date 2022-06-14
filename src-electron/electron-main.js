@@ -118,7 +118,7 @@ function createChildWindow () {
   })
 
   if (process.env.DEBUGGING) {
-    childWindow.webContents.openDevTools()
+    // childWindow.webContents.openDevTools()
   } else {
     childWindow.webContents.on('devtools-opened', () => {
       childWindow.webContents.closeDevTools()
@@ -136,15 +136,22 @@ ipcMain.handle('closeChild', () => {
 })
 
 let monitoringProps = {}
-
+let favoriteUrls = {}
 ipcMain.handle('sendMonitoringProps', (event, args) => {
   monitoringProps = JSON.parse(JSON.stringify(args))
-  console.log(monitoringProps)
+})
+
+ipcMain.handle('initFavoriteUrls', () => {
+  favoriteUrls = {}
+})
+
+ipcMain.handle('setFavoriteUrl', (event, args) => {
+  const favoriteUrl = JSON.parse(JSON.stringify(args))
+  favoriteUrls[favoriteUrl.idx] = favoriteUrl
 })
 
 ipcMain.handle('toggleControl', (event, args) => {
   if (args) {
-    // console.log('getPosition :' + mainWindow.getPosition())
     createChildWindow()
     childWindow.show()
   } else {
