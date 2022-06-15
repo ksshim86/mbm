@@ -88,6 +88,8 @@ export default defineComponent({
     const store = useMonitoringStore()
     const { toggleControl } = storeToRefs(store)
 
+    window.myWindowAPI.initFavoriteUrls()
+
     watch(toggleControl, (to) => {
       if (to && swiperRef.value.autoplay !== undefined) {
         swiperRef.value.autoplay.stop()
@@ -97,8 +99,7 @@ export default defineComponent({
       if (!to && swiperRef.value.autoplay !== undefined) {
         swiperRef.value.autoplay.start()
       }
-    },
-    )
+    })
 
     const router = useRouter()
     const route = useRoute()
@@ -136,38 +137,12 @@ export default defineComponent({
         swiperRef.value.autoplay.start()
       }
 
-      let urlSelectArr = []
-      urlSelectRefs.value.forEach((item) => {
-        let urlSelectObj = {
-          idx: null,
-          tab: '',
-          url: '',
-          bookmarkId: null,
-        }
-
-        urlSelectObj.idx = `${item.slideIdx}${item.rowIdx}${item.colIdx}`
-        urlSelectObj.tab = item.tab
-
-        if (item.webview !== null) {
-          if (item.tab === 'bookmark') {
-            if (item.selectedBookmark !== undefined) {
-              urlSelectObj.bookmarkId = item.selectedBookmark.id
-            }
-          } else {
-            urlSelectObj.url = item.webViewUrl
-          }
-        }
-
-        urlSelectArr.push(urlSelectObj)
-      })
-
       // 편집이 완료된 경우, 세팅된 값을 main으로 값을 전달한다
       window.myWindowAPI.sendMonitoringProps({
         slideCount: slideCount.value,
         slideInterval: slideInterval.value,
         rowCount: rowCount.value,
         colCount: colCount.value,
-        favoriteUrl: urlSelectArr,
       })
     }
 
