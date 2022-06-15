@@ -208,26 +208,37 @@ export default defineComponent({
      * webview에 바인딩에 되는 url이 변경되면
      * 해당 정보를 main에 넘긴다
      */
-    watch(webViewUrl, (to) => {
+    watch(isEdit, (to) => {
       let idx = Number(`${props.slideIdx}${props.rowIdx}${props.colIdx}`)
       let bookmarkId = null
 
-      if (tab.value === 'bookmark') {
-        bookmarkId = selectedBookmark.value.id
-      }
-
-      if (props.isFavorite) {
-        idx = favoriteUrls.value.idx
-      }
-
-      window.myWindowAPI.setFavoriteUrl(
-        {
-          idx: idx,
-          tab: tab.value,
-          url: urlInput.value,
-          bookmarkId: bookmarkId,
+      if (to) {
+        window.myWindowAPI.setFavoriteUrl(
+          {
+            idx: idx,
+            tab: 'bookmark',
+            url: '',
+            bookmarkId: null,
+          }
+        )
+      } else {
+        if (tab.value === 'bookmark') {
+          bookmarkId = selectedBookmark.value.id
         }
-      )
+
+        if (props.isFavorite) {
+          idx = favoriteUrls.value.idx
+        }
+
+        window.myWindowAPI.setFavoriteUrl(
+          {
+            idx: idx,
+            tab: tab.value,
+            url: urlInput.value,
+            bookmarkId: bookmarkId,
+          }
+        )
+      }
     })
 
     return {

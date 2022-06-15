@@ -138,16 +138,18 @@ ipcMain.handle('closeChild', () => {
 let monitoringProps = {}
 let favoriteUrls = {}
 ipcMain.handle('sendMonitoringProps', (event, args) => {
-  monitoringProps = JSON.parse(JSON.stringify(args))
+  monitoringProps = { ...monitoringProps, ...JSON.parse(JSON.stringify(args)) }
 })
 
 ipcMain.handle('initFavoriteUrls', () => {
+  monitoringProps = {}
   favoriteUrls = {}
 })
 
 ipcMain.handle('setFavoriteUrl', (event, args) => {
   const favoriteUrl = JSON.parse(JSON.stringify(args))
   favoriteUrls[favoriteUrl.idx] = favoriteUrl
+  monitoringProps.favoriteUrls = favoriteUrls
 })
 
 ipcMain.handle('toggleControl', (event, args) => {
@@ -391,7 +393,7 @@ ipcMain.handle('insertFavorite', async (event, args) => {
     let res = await sqliteDao.get(`select seq from sqlite_sequence where name = 'favorite'`)
     const favoriteId = res.row.seq
 
-    favorite.favoriteUrl.forEach(async (item) => {
+    favorite.favoriteUrls.forEach(async (item) => {
       const params = [favoriteId, item.idx, item.tab, item.url, item.bookmarkId]
 
       res = await sqliteDao.run(favoriteUrlSql, params)

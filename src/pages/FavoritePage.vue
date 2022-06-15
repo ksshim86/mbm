@@ -341,7 +341,6 @@ export default defineComponent({
     const moreDialog = ref(false)
     const moreFavorite = async (id) => {
       const res = await window.myWindowAPI.selectFavoriteUrls(id)
-      console.log(res.rows)
       moreFavoriteUrls.value = res.rows
       moreDialog.value = true
     }

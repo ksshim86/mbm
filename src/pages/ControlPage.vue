@@ -209,7 +209,6 @@ export default defineComponent({
     const slideInterval = ref(0)
     const rowCount = ref(0)
     const colCount = ref(0)
-    const favoriteUrl = ref(null)
     const options = ref([])
     const paginationOption = ref({
       clickable: true,
@@ -243,36 +242,38 @@ export default defineComponent({
       newForm.value.focus()
     }
     const addFavorite = async () => {
-      // const res = await window.myWindowAPI.insertFavorite(JSON.parse(JSON.stringify({
-      //   name: newFavorite.value.name,
-      //   slideCount: slideCount.value,
-      //   slideInterval: slideInterval.value,
-      //   rowCount: rowCount.value,
-      //   colCount: colCount.value,
-      //   favoriteUrl: favoriteUrl.value,
-      // })))
+      const { favoriteUrls } = await window.myWindowAPI.getMonitoringProps()
 
-      // card.value = false
+      const res = await window.myWindowAPI.insertFavorite(JSON.parse(JSON.stringify({
+        name: newFavorite.value.name,
+        slideCount: slideCount.value,
+        slideInterval: slideInterval.value,
+        rowCount: rowCount.value,
+        colCount: colCount.value,
+        favoriteUrls: Object.keys(favoriteUrls).map((key) => favoriteUrls[key]),
+      })))
 
-      // if (res.result) {
-      //   quasar.notify({
-      //     message: 'Add completed',
-      //     type: 'positive',
-      //     textColor: 'dark',
-      //     position: 'bottom-right',
-      //     progress: true,
-      //     timeout: 2500,
-      //   })
-      // } else {
-      //   quasar.notify({
-      //     message: 'Add failed',
-      //     type: 'negative',
-      //     textColor: 'dark',
-      //     position: 'bottom-right',
-      //     progress: true,
-      //     timeout: 2500,
-      //   })
-      // }
+      card.value = false
+
+      if (res.result) {
+        quasar.notify({
+          message: 'Add completed',
+          type: 'positive',
+          textColor: 'dark',
+          position: 'bottom-right',
+          progress: true,
+          timeout: 2500,
+        })
+      } else {
+        quasar.notify({
+          message: 'Add failed',
+          type: 'negative',
+          textColor: 'dark',
+          position: 'bottom-right',
+          progress: true,
+          timeout: 2500,
+        })
+      }
     }
 
     return {
@@ -290,7 +291,6 @@ export default defineComponent({
       slideInterval,
       rowCount,
       colCount,
-      favoriteUrl,
       controlEditModeOn () {
         store.setIsDone(false)
         window.myWindowAPI.controlEditModeOn()
@@ -316,13 +316,12 @@ export default defineComponent({
     }
   },
   async created () {
-    const { slideCount, slideInterval, rowCount, colCount, favoriteUrl } = await window.myWindowAPI.getMonitoringProps()
+    const { slideCount, slideInterval, rowCount, colCount } = await window.myWindowAPI.getMonitoringProps()
 
     this.slideCount = slideCount
     this.slideInterval = slideInterval
     this.rowCount = rowCount
     this.colCount = colCount
-    this.favoriteUrl = favoriteUrl
 
     for (let i = 1; i <= slideCount; i++) {
       let browserCnt = 1
