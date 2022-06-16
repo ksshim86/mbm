@@ -72,19 +72,6 @@
             <div class="col-6 q-px-sm">
               <q-btn
                 class="remote-btn"
-                icon="replay"
-                label="url"
-                color="orange"
-                text-color="grey-9"
-                :disable="toggle === ''"
-                @click="controlSelectUrlOn"
-              />
-            </div>
-          </div>
-          <div class="row">
-            <div class="col q-px-sm">
-              <q-btn
-                class="remote-btn"
                 icon="zoom_out"
                 label="zoom out"
                 color="orange"
@@ -93,7 +80,54 @@
                 @click="zoomOut"
               />
             </div>
-            <div class="col q-px-sm"></div>
+          </div>
+          <div class="row">
+            <div class="col q-px-sm">
+              <q-btn
+                class="remote-btn"
+                icon="edit"
+                label="url"
+                color="orange"
+                text-color="grey-9"
+                :disable="toggle === ''"
+                @click="controlSelectUrlOn"
+              />
+            </div>
+            <div class="col q-px-sm">
+              <q-btn
+                class="remote-btn"
+                icon="refresh"
+                label="refresh"
+                color="orange"
+                text-color="grey-9"
+                :disable="toggle === ''"
+                @click="refresh"
+              />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col q-px-sm">
+              <q-btn
+                class="remote-btn"
+                icon="arrow_back"
+                label="back"
+                color="orange"
+                text-color="grey-9"
+                :disable="toggle === ''"
+                @click="back"
+              />
+            </div>
+            <div class="col q-px-sm">
+              <q-btn
+                class="remote-btn"
+                icon="arrow_forward"
+                label="forward"
+                color="orange"
+                text-color="grey-9"
+                :disable="toggle === ''"
+                @click="forward"
+              />
+            </div>
           </div>
         </div>
         <q-footer class="bg-dark q-pa-md text-center">
@@ -305,6 +339,15 @@ export default defineComponent({
       },
       zoomOut () {
         window.myWindowAPI.commandZoomOut(toggle.value)
+      },
+      refresh () {
+        window.myWindowAPI.commandRefresh(toggle.value)
+      },
+      back () {
+        window.myWindowAPI.commandGoBack(toggle.value)
+      },
+      forward () {
+        window.myWindowAPI.commandGoForward(toggle.value)
       },
       goMain () {
         window.myWindowAPI.commandGoMain()

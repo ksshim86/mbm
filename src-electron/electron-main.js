@@ -187,6 +187,18 @@ ipcMain.handle('commandZoomOut', (event, args) => {
   mainWindow.webContents.send(`zoomOut-${args}`)
 })
 
+ipcMain.handle('commandRefresh', (event, args) => {
+  mainWindow.webContents.send(`refresh-${args}`)
+})
+
+ipcMain.handle('commandGoBack', (event, args) => {
+  mainWindow.webContents.send(`goBack-${args}`)
+})
+
+ipcMain.handle('commandGoForward', (event, args) => {
+  mainWindow.webContents.send(`goForward-${args}`)
+})
+
 ipcMain.handle('commandGoMain', () => {
   if (childWindow != null) {
     childWindow.close()

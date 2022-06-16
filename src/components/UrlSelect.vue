@@ -178,9 +178,24 @@ export default defineComponent({
         webview.value.setZoomLevel(zoomLevel - 1)
       }
 
+      const refreshFunc = function (args) {
+        webview.value.reload()
+      }
+
+      const goBackFunc = function (args) {
+        webview.value.goBack()
+      }
+
+      const goForwardFunc = function (args) {
+        webview.value.goForward()
+      }
+
       window.myWindowAPI.receive(`controlSelectUrlOn-${idx}`, selectUrlOnFunc)
       window.myWindowAPI.receive(`zoomIn-${idx}`, zoomInFunc)
       window.myWindowAPI.receive(`zoomOut-${idx}`, zoomOutFunc)
+      window.myWindowAPI.receive(`refresh-${idx}`, refreshFunc)
+      window.myWindowAPI.receive(`goBack-${idx}`, goBackFunc)
+      window.myWindowAPI.receive(`goForward-${idx}`, goForwardFunc)
     })
 
     let tempIdx = Number(`${props.slideIdx}${props.rowIdx}${props.colIdx}`)

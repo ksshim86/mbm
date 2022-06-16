@@ -68,6 +68,15 @@ contextBridge.exposeInMainWorld('myWindowAPI', {
   commandZoomOut (args) {
     ipcRenderer.invoke('commandZoomOut', args)
   },
+  commandRefresh (args) {
+    ipcRenderer.invoke('commandRefresh', args)
+  },
+  commandGoBack (args) {
+    ipcRenderer.invoke('commandGoBack', args)
+  },
+  commandGoForward (args) {
+    ipcRenderer.invoke('commandGoForward', args)
+  },
   commandGoMain () {
     ipcRenderer.invoke('commandGoMain')
   },
