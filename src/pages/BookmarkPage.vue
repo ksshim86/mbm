@@ -190,7 +190,7 @@
                 dense
                 :rules="[
                   val => !!val || 'Name is required',
-                  val => val.length <= 10 || 'Please use maximum 10 characters'
+                  val => val.length <= 20 || 'Please use maximum 20 characters'
                 ]"
               />
             </div>
@@ -305,9 +305,9 @@ export default defineComponent({
         errorName.value = true
         errorMessageName.value = 'Name is required'
         return false
-      } else if (val.length > 10) {
+      } else if (val.length > 20) {
         errorName.value = true
-        errorMessageName.value = 'Please use maximum 10 characters'
+        errorMessageName.value = 'Please use maximum 20 characters'
         return false
       }
 
